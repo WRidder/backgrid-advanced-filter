@@ -1,0 +1,22 @@
+root = true
+
+[*]
+charset = utf-8
+
+[{test/**/*.js, src/**.js, config/**.js}]
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+insert_final_newline: true
+
+[*.{js, json}]
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+insert_final_newline: true
+
+[test/**/*.json]
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+insert_final_newline: true

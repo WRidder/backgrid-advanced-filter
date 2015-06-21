@@ -1,0 +1,185 @@
+/*
+Filter selector
+*/
+div.advancedfilter-selector {
+    height: 30px
+}
+
+div.advancedfilter-selector > div {
+    display: inline-block;
+}
+
+/*
+Filter selector - label
+*/
+div.advancedfilter-selector > .filter-label > span {
+    display: inline-block;
+    padding: 0px 2px 0px 10px;
+    margin: 0px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 30px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-radius: .25em;
+    background-color: #777;
+}
+
+div.advancedfilter-selector > .filter-label > span.create{
+    cursor: pointer;
+    padding: 0px 10px;
+}
+
+div.advancedfilter-selector > .filter-label span.remove-filter {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 0 8px;
+}
+
+/*
+Filter selector - search
+*/
+div.advancedfilter-selector > .filter-search {
+    width: 50%;
+}
+
+div.advancedfilter-selector > .filter-search > form.backgrid-filter.form-search {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+div.advancedfilter-selector > .filter-search .backgrid-filter input[type="search"] {
+    position: relative;
+    width: 100%;
+}
+
+/*
+Filter selector - Dropdown button
+*/
+div.advancedfilter-selector > div.filter-dropdown button.dropdown-button {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+}
+
+div.advancedfilter-selector > div.filter-dropdown button.dropdown-button:disabled{
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+/*
+Filter selector - Dropdown container
+*/
+div.filter-dropdown-container {
+    cursor: default;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background: #fff;
+    border: solid 1px #bbb;
+    -webkit-box-shadow: #999999 0 1px 3px;
+    -moz-box-shadow: #999999 0 1px 3px;
+    box-shadow: #999999 0 1px 3px;
+    width: 200px;
+    display: none !important;
+    min-height: 20px;
+    max-height: 400px;
+    font-size: 14px;
+    line-height: 1.1em;
+    font-weight: normal;
+    text-align: left;
+    color: #444;
+    text-transform: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    pointer-events: none;
+}
+
+div.filter-dropdown-container.open {
+    display: block !important;
+    pointer-events: auto;
+}
+
+.filter-dropdown-container > li {
+    list-style-type:none;
+    padding: 5px 0px 0px 20px;
+    border-bottom: solid 1px lightgray;
+    cursor: pointer;
+}
+
+.filter-dropdown-container > li:hover {
+    background-color: #f0f0f0;
+}
+
+.filter-dropdown-container > li:last-child {
+    border-bottom: none;
+}
+
+.filter-dropdown-container > li > span.indicator {
+    width: 20px;
+    display: inline-block;
+}
+.filter-dropdown-container > li.active > span.indicator::before {
+    content: "✓";
+    color: black;
+}
+
+.filter-dropdown-container > li > span.column-label {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    width: 150px;
+}
+
+/*
+Saver component
+*/
+div.advancedfilter-saver {
+    position: relative;
+    clear: both;
+}
+
+div.advancedfilter-saver > div.advancedfilter-saver-input {
+    float: left;
+    width: 50%;
+}
+
+div.advancedfilter-saver > div.advancedfilter-saver-buttons {
+    float: left;
+    width: 50%;
+}
+
+/*
+Editor component
+*/
+div.advancedfilter-editor button.new-attribute-filter {
+    float: right;
+}

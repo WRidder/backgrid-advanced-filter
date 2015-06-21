@@ -1,0 +1,2 @@
+Filter syntax adheres to the mongodb query syntax.
+- http://docs.mongodb.org/manual/reference/operator/query/

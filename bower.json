@@ -1,0 +1,23 @@
+{
+  "name": "backgrid-advanced-filter",
+  "version": "0.0.1",
+  "homepage": "https://github.com/WRidder/backgrid-advanced-filter",
+  "authors": [
+    "Wilbert van de Ridder <wilbert.ridder@gmail.com>"
+  ],
+  "description": "Advanced filter for backgrid",
+  "main": "./lib/Backgrid.AdvancedFilter.js",
+  "keywords": [
+    "backgrid",
+    "advanced",
+    "filter"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
