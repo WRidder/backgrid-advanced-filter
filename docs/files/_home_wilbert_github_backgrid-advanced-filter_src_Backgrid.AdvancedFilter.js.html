@@ -67,6 +67,8 @@
             
                 <li><a href="../classes/FilterStateModel.html">FilterStateModel</a></li>
             
+                <li><a href="../classes/NewFilterButtonView.html">NewFilterButtonView</a></li>
+            
             </ul>
 
             <ul id="api-modules" class="apis modules">
@@ -260,6 +262,7 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
     var fsm = self.filterStateModel;
     self.listenTo(fsm, &quot;filter:new&quot;, self.evtNewFilter);
     self.listenTo(fsm, &quot;filter:save&quot;, self.evtSaveFilter);
+    //self.listenTo(fsm, &quot;filter:change&quot;, self.evtChangeFilter);
     self.listenTo(fsm, &quot;filter:reset&quot;, self.evtResetFilter);
     self.listenTo(fsm, &quot;filter:cancel&quot;, self.evtCancelFilter);
     self.listenTo(fsm, &quot;filter:remove&quot;, self.evtRemoveFilter);
@@ -275,6 +278,8 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
 
     var newFilter = fsm.get(&quot;filterCollection&quot;).createNewFilter();
     fsm.set(&quot;activeFilterId&quot;, newFilter.cid);
+
+    self.trigger(&quot;filter:new&quot;, newFilter.cid, newFilter);
   },
 
   /**
@@ -290,6 +295,15 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
 
     self.trigger(&quot;filter:save&quot;, filterId, filter);
   },
+
+/*  /!**
+   * Event handler for filter:change (fsm)
+   * @method evtChangeFilter
+   *!/
+  evtChangeFilter: function(filterModel) {
+    var self = this;
+    self.trigger(&quot;filter:change&quot;, filterModel.cid, filterModel);
+  },*/
 
   /**
    * Event handler for filter:reset (fsm)
@@ -314,14 +328,14 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
     var fsm = self.filterStateModel;
     var filterId = fsm.get(&quot;activeFilterId&quot;);
     var filter = fsm.get(&quot;filterCollection&quot;).get(filterId);
-    var currentState = {
+    var stateBeforeCancel = {
       name: filter.get(&quot;name&quot;),
-      filters: filter.get(&quot;filters&quot;) ? filter.get(&quot;filters&quot;).toJSON() : null
+      attributeFilters: filter.get(&quot;attributeFilters&quot;) ? filter.get(&quot;attributeFilters&quot;).toJSON() : null
     };
 
     filter.cancelFilter();
 
-    self.trigger(&quot;filter:cancel&quot;, filterId, filter, currentState);
+    self.trigger(&quot;filter:cancel&quot;, filterId, filter, stateBeforeCancel);
   },
 
   /**

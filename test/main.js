@@ -84,14 +84,45 @@ describe("A Backgrid.AdvancedFilter Main", function () {
     beforeEach(function() {
       spyOn(AdvancedFilter.Main.prototype, "evtNewFilter").and.callThrough();
       spyOn(AdvancedFilter.Main.prototype, "evtSaveFilter").and.callThrough();
+      //spyOn(AdvancedFilter.Main.prototype, "evtChangeFilter").and.callThrough();
       spyOn(AdvancedFilter.Main.prototype, "evtResetFilter").and.callThrough();
       spyOn(AdvancedFilter.Main.prototype, "evtCancelFilter").and.callThrough();
       spyOn(AdvancedFilter.Main.prototype, "evtRemoveFilter").and.callThrough();
 
-      var filters = new AdvancedFilter.FilterCollection({
-        name: "Test filter",
-        filters: new AdvancedFilter.AttributeFilterCollection()
-      });
+      var filters = new AdvancedFilter.FilterCollection([
+        {
+          name: "Test filter",
+          attributeFilters: [
+            {
+              column: "testcol",
+              type: "text",
+              settings: {
+                matcher: "equals",
+                value: "someValue"
+              }
+            },
+            {
+              column: "testcol1",
+              type: "text",
+              settings: {
+                matcher: "startsWith",
+                value: "thisValue"
+              }
+            }
+          ]
+        },
+        {
+          name: "Test filter",
+          attributeFilters: {
+            column: "testcol",
+            type: "text",
+            settings: {
+              matcher: "equals",
+              value: "someValue"
+            }
+          }
+        }
+      ]);
 
       main = new AdvancedFilter.Main({
         collection: new Backbone.Collection(),
@@ -109,12 +140,25 @@ describe("A Backgrid.AdvancedFilter Main", function () {
     });
 
     it("binds to the filter:new event on the filter state model", function () {
+      var triggerSpy = jasmine.createSpy("triggerSpy");
+      main.on("filter:new", triggerSpy);
+
       // Trigger event
       main.filterStateModel.trigger("filter:new");
-
       expect(main.evtNewFilter).toHaveBeenCalled();
       expect(main.evtNewFilter.calls.count()).toEqual(1);
-      expect(main.filterStateModel.get("filterCollection").length).toEqual(2);
+
+      // Get filter
+      var filterId = main.filterStateModel.get("activeFilterId");
+      var filter = main.filterStateModel.get("filterCollection").get(filterId);
+
+      // Check if events are triggered on the main component
+      expect(triggerSpy).toHaveBeenCalled();
+      expect(triggerSpy.calls.count()).toEqual(1);
+      expect(triggerSpy).toHaveBeenCalledWith(
+        filterId,
+        filter
+      );
     });
 
     it("binds to the filter:save event on the filter state model", function () {
@@ -138,6 +182,30 @@ describe("A Backgrid.AdvancedFilter Main", function () {
         filter
       );
     });
+
+/*    it("binds to the filter:change event on the filter state model", function () {
+      var triggerSpy = jasmine.createSpy("triggerSpy");
+      main.on("filter:change", triggerSpy);
+
+      // Get filter
+      var filterId = main.filterStateModel.get("activeFilterId");
+      var filter = main.filterStateModel.get("filterCollection").get(filterId);
+      var attributeFilter = filter.get("attributeFilters").first();
+
+      // Update attribute filter
+      attributeFilter.set("column", "anothercolumn")
+
+      expect(main.evtChangeFilter).toHaveBeenCalled();
+      expect(main.evtChangeFilter.calls.count()).toEqual(1);
+      console.log("halp!");
+      // Check if events are triggered on the main component
+      expect(triggerSpy).toHaveBeenCalled();
+      expect(triggerSpy.calls.count()).toEqual(1);
+      expect(triggerSpy).toHaveBeenCalledWith(
+        filterId,
+        filter
+      );
+    });*/
 
     it("binds to the filter:reset event on the filter state model", function () {
       var triggerSpy = jasmine.createSpy("triggerSpy");
@@ -173,9 +241,9 @@ describe("A Backgrid.AdvancedFilter Main", function () {
       // Get filter
       var filterId = main.filterStateModel.get("activeFilterId");
       var filter = main.filterStateModel.get("filterCollection").get(filterId);
-      var currentState = {
+      var stateBeforeCancel = {
         name: filter.get("name"),
-        filters: filter.get("filters").toJSON()
+        attributeFilters: filter.get("attributeFilters").toJSON()
       };
 
       // Check if events are triggered on the main component
@@ -184,14 +252,14 @@ describe("A Backgrid.AdvancedFilter Main", function () {
       expect(triggerSpy).toHaveBeenCalledWith(
         filterId,
         filter,
-        currentState
+        stateBeforeCancel
       );
 
-      main.filterStateModel.get("filterCollection").first().set("filters", null);
+      main.filterStateModel.get("filterCollection").first().set("attributeFilters", null);
       main.filterStateModel.trigger("filter:cancel");
       var currentState1 = {
         name: filter.get("name"),
-        filters: null
+        attributeFilters: null
       };
 
       expect(triggerSpy).toHaveBeenCalledWith(
@@ -202,12 +270,27 @@ describe("A Backgrid.AdvancedFilter Main", function () {
     });
 
     it("binds to the filter:remove event on the filter state model", function () {
+      var triggerSpy = jasmine.createSpy("triggerSpy");
+      main.on("filter:remove", triggerSpy);
+
+      // Get filter
+      var filterId = main.filterStateModel.get("activeFilterId");
+      var filterName = main.filterStateModel.get("filterCollection").get(filterId).get("name");
+
       // Trigger event
       main.filterStateModel.trigger("filter:remove");
 
       expect(main.evtRemoveFilter).toHaveBeenCalled();
       expect(main.evtRemoveFilter.calls.count()).toEqual(1);
-      expect(main.filterStateModel.get("filterCollection").length).toEqual(0);
+      expect(main.filterStateModel.get("filterCollection").length).toEqual(1);
+
+      // Check if events are triggered on the main component
+      expect(triggerSpy).toHaveBeenCalled();
+      expect(triggerSpy.calls.count()).toEqual(1);
+      expect(triggerSpy).toHaveBeenCalledWith(
+        filterId,
+        filterName
+      );
     });
 
     it("invokes the sub plugins on render", function () {

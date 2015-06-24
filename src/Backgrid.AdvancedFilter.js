@@ -134,6 +134,7 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
     var fsm = self.filterStateModel;
     self.listenTo(fsm, "filter:new", self.evtNewFilter);
     self.listenTo(fsm, "filter:save", self.evtSaveFilter);
+    //self.listenTo(fsm, "filter:change", self.evtChangeFilter);
     self.listenTo(fsm, "filter:reset", self.evtResetFilter);
     self.listenTo(fsm, "filter:cancel", self.evtCancelFilter);
     self.listenTo(fsm, "filter:remove", self.evtRemoveFilter);
@@ -149,6 +150,8 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
 
     var newFilter = fsm.get("filterCollection").createNewFilter();
     fsm.set("activeFilterId", newFilter.cid);
+
+    self.trigger("filter:new", newFilter.cid, newFilter);
   },
 
   /**
@@ -164,6 +167,15 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
 
     self.trigger("filter:save", filterId, filter);
   },
+
+/*  /!**
+   * Event handler for filter:change (fsm)
+   * @method evtChangeFilter
+   *!/
+  evtChangeFilter: function(filterModel) {
+    var self = this;
+    self.trigger("filter:change", filterModel.cid, filterModel);
+  },*/
 
   /**
    * Event handler for filter:reset (fsm)
@@ -188,14 +200,14 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
     var fsm = self.filterStateModel;
     var filterId = fsm.get("activeFilterId");
     var filter = fsm.get("filterCollection").get(filterId);
-    var currentState = {
+    var stateBeforeCancel = {
       name: filter.get("name"),
-      filters: filter.get("filters") ? filter.get("filters").toJSON() : null
+      attributeFilters: filter.get("attributeFilters") ? filter.get("attributeFilters").toJSON() : null
     };
 
     filter.cancelFilter();
 
-    self.trigger("filter:cancel", filterId, filter, currentState);
+    self.trigger("filter:cancel", filterId, filter, stateBeforeCancel);
   },
 
   /**

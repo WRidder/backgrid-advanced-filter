@@ -33,7 +33,7 @@ Backgrid.Extension.AdvancedFilter.AttributeFilterCollection = Backbone.Collectio
   /**
    * @method createNewFilter
    */
-  createNewFilter: function() {
+  createNewAttributeFilter: function() {
     var self = this;
 
     self.add({});
@@ -56,6 +56,8 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
    */
   initialize: function() {
     var self = this;
+
+    // Save the initial state so we can cancel changes later.
     self.saveState();
   },
 
@@ -72,7 +74,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
    */
   resetFilter: function() {
     var self = this;
-    self.set("attributeFilters", new Backgrid.Extension.AdvancedFilter.AttributeFilterCollection());
+    self.set("attributeFilters", []);
   },
 
   /**
@@ -115,10 +117,27 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
     if (self.lastSavedState) {
       self.set({
         name: self.lastSavedState.name,
-        attributeFilters: new Backgrid.Extension.AdvancedFilter
-          .AttributeFilterCollection(self.lastSavedState.attributeFilters)
+        attributeFilters: self.lastSavedState.attributeFilters
       });
     }
+  },
+
+  /**
+   * Set override
+   * Makes sure the attributeFilters are set as a collection.
+   *
+   * @method set
+   * @param {Object} attributes
+   * @param {Object} options
+   * @return {*}
+   */
+  set: function(attributes, options) {
+    var AttrCollection = Backgrid.Extension.AdvancedFilter.AttributeFilterCollection;
+    if (attributes.attributeFilters !== undefined &&
+      !(attributes.attributeFilters instanceof AttrCollection)) {
+      attributes.attributeFilters = new AttrCollection(attributes.attributeFilters);
+    }
+    return Backbone.Model.prototype.set.call(this, attributes, options);
   }
 });
 

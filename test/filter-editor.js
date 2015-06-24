@@ -55,7 +55,7 @@ describe("A Backgrid.AdvancedFilter Editor", function () {
     });
 
     it("shows an 'add filter' button if attribute filter collection is empty", function() {
-      expect($("button.new-attribute-filter").length).toBe(1);
+      expect($(".advancedfilter-editor > div > button.new-attribute-filter").length).toBe(1);
     });
 
     it("shows a filter when the 'add filter' button is clicked", function() {
@@ -63,8 +63,7 @@ describe("A Backgrid.AdvancedFilter Editor", function () {
       $("button.new-attribute-filter").first().click();
 
       // Add filter button should be gone now
-      expect($("button.new-attribute-filter").length).toBe(0);
-
+      expect($(".advancedfilter-editor > div > button.new-attribute-filter").length).toBe(0);
     });
   });
 });
