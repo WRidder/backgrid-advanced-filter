@@ -44,8 +44,14 @@ var matchers = {
  */
 var types = {
   "text": {
+    parser: function(value) {
+      return value;
+    },
     validation: function(value) {
       return _.isString(value);
+    },
+    postProcess: function(value) {
+      return value;
     },
     matchers: ["sw", "ew", "eq", "neq"]
   },
@@ -56,17 +62,32 @@ var types = {
     validation: function(value) {
       return !isNaN(value);
     },
+    postProcess: function(value) {
+      return value;
+    },
     matchers: ["gt", "lt", "bt", "eq", "neq"]
   },
   "percent": {
+    parser: function(value) {
+      return parseFloat(value);
+    },
     validation: function(value) {
       return !isNaN(value) && value >= 0 && value <= 100;
+    },
+    postProcess: function(value) {
+      return value;
     },
     matchers: ["gt", "lt", "bt", "eq", "neq"]
   },
   "boolean": {
+    parser: function(value) {
+      return !!value;
+    },
     validation: function(value) {
-      return _.isBoolean(value) || value === "true" || value === "false";
+      return _.isBoolean(value);
+    },
+    postProcess: function(value) {
+      return value;
     },
     matchers: ["eq", "neq"]
   }
@@ -112,8 +133,7 @@ var NewFilterButtonView = Backbone.View.extend({
 
     // Get current filter
     var fsm = self.filterStateModel;
-    var filterId = fsm.get("activeFilterId");
-    var activeFilter = fsm.get("filterCollection").get(filterId);
+    var activeFilter = fsm.getActiveFilter();
     activeFilter.get("attributeFilters").createNewAttributeFilter();
 
     // Rerender
@@ -331,7 +351,7 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
     var filterId = fsm.get("activeFilterId");
 
     // Unbind from previous filter if necessary
-    if (self.activeFilter) {
+    if (self.activeFilter && fsm.get("filterCollection").contains(self.activeFilter)) {
       self.stopListening(self.activeFilter.get("attributeFilters"));
     }
 
@@ -339,7 +359,7 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
       self.activeFilter = fsm.get("filterCollection").get(filterId);
 
       // Add event listener to attribute filter collection
-      self.listenTo(self.activeFilter.get("attributeFilters"), "add remove", self.render);
+      self.listenTo(self.activeFilter.get("attributeFilters"), "add remove reset", self.render);
     }
     else {
       self.activeFilter = null;

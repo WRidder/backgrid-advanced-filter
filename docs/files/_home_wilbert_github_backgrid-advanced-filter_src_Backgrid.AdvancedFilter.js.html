@@ -180,7 +180,7 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
       throw new Error(&quot;AdvancedFilter: columns are required.&quot;);
     }
 
-    if (!self.options.filters) {
+    if (!self.options.filters || (_.isArray(self.options.filter) &amp;&amp; _.isEmpty(self.options.filter))) {
       // No filters provided, create empty collection
       self.options.filters = new Backgrid.Extension.AdvancedFilter.FilterCollection();
     }
@@ -311,12 +311,10 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
    */
   evtResetFilter: function() {
     var self = this;
-    var fsm = self.filterStateModel;
-    var filterId = fsm.get(&quot;activeFilterId&quot;);
-    var filter = fsm.get(&quot;filterCollection&quot;).get(filterId);
-    filter.resetFilter();
+    var activeFilter = self.filterStateModel.getActiveFilter();
+    activeFilter.resetFilter();
 
-    self.trigger(&quot;filter:reset&quot;, filterId, filter);
+    self.trigger(&quot;filter:reset&quot;, activeFilter.cid, activeFilter);
   },
 
   /**
@@ -325,17 +323,15 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
    */
   evtCancelFilter: function() {
     var self = this;
-    var fsm = self.filterStateModel;
-    var filterId = fsm.get(&quot;activeFilterId&quot;);
-    var filter = fsm.get(&quot;filterCollection&quot;).get(filterId);
+    var currentFilter = self.filterStateModel.getActiveFilter();
     var stateBeforeCancel = {
-      name: filter.get(&quot;name&quot;),
-      attributeFilters: filter.get(&quot;attributeFilters&quot;) ? filter.get(&quot;attributeFilters&quot;).toJSON() : null
+      name: currentFilter.get(&quot;name&quot;),
+      attributeFilters: currentFilter.get(&quot;attributeFilters&quot;) ? currentFilter.get(&quot;attributeFilters&quot;).toJSON() : null
     };
 
-    filter.cancelFilter();
+    currentFilter.cancelFilter();
 
-    self.trigger(&quot;filter:cancel&quot;, filterId, filter, stateBeforeCancel);
+    self.trigger(&quot;filter:cancel&quot;, currentFilter.cid, currentFilter, stateBeforeCancel);
   },
 
   /**

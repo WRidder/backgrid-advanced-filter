@@ -48,7 +48,7 @@ Backgrid.Extension.AdvancedFilter.AttributeFilterCollection = Backbone.Collectio
 var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model.extend({
   defaults: {
     name: null,
-    attributeFilters: new Backgrid.Extension.AdvancedFilter.AttributeFilterCollection()
+    attributeFilters: null
   },
 
   /**
@@ -74,7 +74,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
    */
   resetFilter: function() {
     var self = this;
-    self.set("attributeFilters", []);
+    self.get("attributeFilters").reset([]);
   },
 
   /**

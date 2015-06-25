@@ -52,7 +52,7 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
       throw new Error("AdvancedFilter: columns are required.");
     }
 
-    if (!self.options.filters) {
+    if (!self.options.filters || (_.isArray(self.options.filter) && _.isEmpty(self.options.filter))) {
       // No filters provided, create empty collection
       self.options.filters = new Backgrid.Extension.AdvancedFilter.FilterCollection();
     }
@@ -183,12 +183,10 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
    */
   evtResetFilter: function() {
     var self = this;
-    var fsm = self.filterStateModel;
-    var filterId = fsm.get("activeFilterId");
-    var filter = fsm.get("filterCollection").get(filterId);
-    filter.resetFilter();
+    var activeFilter = self.filterStateModel.getActiveFilter();
+    activeFilter.resetFilter();
 
-    self.trigger("filter:reset", filterId, filter);
+    self.trigger("filter:reset", activeFilter.cid, activeFilter);
   },
 
   /**
@@ -197,17 +195,15 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
    */
   evtCancelFilter: function() {
     var self = this;
-    var fsm = self.filterStateModel;
-    var filterId = fsm.get("activeFilterId");
-    var filter = fsm.get("filterCollection").get(filterId);
+    var currentFilter = self.filterStateModel.getActiveFilter();
     var stateBeforeCancel = {
-      name: filter.get("name"),
-      attributeFilters: filter.get("attributeFilters") ? filter.get("attributeFilters").toJSON() : null
+      name: currentFilter.get("name"),
+      attributeFilters: currentFilter.get("attributeFilters") ? currentFilter.get("attributeFilters").toJSON() : null
     };
 
-    filter.cancelFilter();
+    currentFilter.cancelFilter();
 
-    self.trigger("filter:cancel", filterId, filter, stateBeforeCancel);
+    self.trigger("filter:cancel", currentFilter.cid, currentFilter, stateBeforeCancel);
   },
 
   /**

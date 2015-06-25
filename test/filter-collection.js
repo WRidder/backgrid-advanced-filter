@@ -25,6 +25,12 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     expect(modelKeys).toEqual(["attributeFilters", "name"]);
   });
 
+  it("has an empty attributeFilter collection when none is provided on init", function() {
+    var newFM = new AdvancedFilter.FilterModel();
+    var newAttrFilters = newFM.get("attributeFilters");
+    expect(newAttrFilters instanceof Backgrid.Extension.AdvancedFilter.AttributeFilterCollection);
+  });
+
   it("resets the model with resetFilter()", function() {
     fm.set("name", "Test filter 1");
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
@@ -204,6 +210,40 @@ describe("A Backgrid.AdvancedFilter Filter collection", function () {
     fc.createNewFilter();
     expect(fc.last().get("name")).toEqual("New Filter #5");
   });
+
+
+  it("should not retain the state of a previously deleted model", function() {
+    fc.createNewFilter();
+    fc.createNewFilter();
+    fc.createNewFilter();
+    expect(fc.length).toBe(3);
+
+    // Set filter values
+    var lastFilter = fc.last();
+    lastFilter.get("attributeFilters").add([
+      {
+      column: "testcol",
+      type: "text",
+      settings: {
+        value: "test"
+      }
+    },
+      {
+        column: "testcol",
+        type: "text",
+        settings: {
+          value: "test"
+        }
+      }
+    ]);
+    expect(lastFilter.get("attributeFilters").length).toBe(2);
+
+    fc.remove(lastFilter);
+    fc.createNewFilter();
+    lastFilter = fc.last();
+
+    expect(lastFilter.get("attributeFilters").length).toBe(0);
+  });
 });
 
 describe("A Backgrid.AdvancedFilter Attribute filter model", function () {
@@ -228,7 +268,7 @@ describe("A Backgrid.AdvancedFilter Attribute filter model", function () {
 describe("A Backgrid.AdvancedFilter Attribute filter collection", function () {
   var afc;
   beforeEach(function() {
-    afc = new AdvancedFilter.FilterCollection();
+    afc = new AdvancedFilter.AttributeFilterCollection();
   });
 
   it("is an instance of Backbone.Collection", function() {

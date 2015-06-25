@@ -187,3 +187,19 @@ div.advancedfilter-editor button.new-attribute-filter {
 div.advancedfilter-editor button.remove-attribute-filter {
     float: right;
 }
+
+div.advancedfilter-editor .filter-editor {
+    margin: 2px 0;
+}
+
+div.advancedfilter-editor .filter-editor select {
+    height: 26px;
+}
+
+div.advancedfilter-editor .filter-editor select {
+    height: 26px;
+}
+
+div.advancedfilter-editor .filter-editor button {
+    height: 26px;
+}

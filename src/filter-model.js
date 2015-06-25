@@ -19,5 +19,15 @@ Backgrid.Extension.AdvancedFilter.FilterStateModel = Backbone.Model.extend({
     columnCollection: null,
     dataCollection: null,
     filterCollection: null
+  },
+
+  /**
+   * @method getActiveFilter
+   * @return {Backgrid.Extension.AdvancedFilter.FilterModel}
+   */
+  getActiveFilter: function() {
+    var self = this;
+    var filterId = self.get("activeFilterId");
+    return self.get("filterCollection").get(filterId);
   }
 });

@@ -24,4 +24,12 @@ describe("A Backgrid.AdvancedFilter Filter State model", function () {
     expect(modelKeys.length).toBe(4);
     expect(modelKeys).toEqual(["activeFilterId", "columnCollection", "dataCollection", "filterCollection"]);
   });
+
+  it("returns the active filter using getActiveFilter()", function() {
+    fsm.set("filterCollection", new AdvancedFilter.FilterCollection());
+    var newFilter = fsm.get("filterCollection").createNewFilter();
+    fsm.set("activeFilterId", newFilter.cid);
+
+    expect(fsm.getActiveFilter()).toBe(newFilter);
+  });
 });

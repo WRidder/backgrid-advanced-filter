@@ -172,8 +172,14 @@ var matchers = {
  */
 var types = {
   &quot;text&quot;: {
+    parser: function(value) {
+      return value;
+    },
     validation: function(value) {
       return _.isString(value);
+    },
+    postProcess: function(value) {
+      return value;
     },
     matchers: [&quot;sw&quot;, &quot;ew&quot;, &quot;eq&quot;, &quot;neq&quot;]
   },
@@ -184,17 +190,32 @@ var types = {
     validation: function(value) {
       return !isNaN(value);
     },
+    postProcess: function(value) {
+      return value;
+    },
     matchers: [&quot;gt&quot;, &quot;lt&quot;, &quot;bt&quot;, &quot;eq&quot;, &quot;neq&quot;]
   },
   &quot;percent&quot;: {
+    parser: function(value) {
+      return parseFloat(value);
+    },
     validation: function(value) {
       return !isNaN(value) &amp;&amp; value &gt;= 0 &amp;&amp; value &lt;= 100;
+    },
+    postProcess: function(value) {
+      return value;
     },
     matchers: [&quot;gt&quot;, &quot;lt&quot;, &quot;bt&quot;, &quot;eq&quot;, &quot;neq&quot;]
   },
   &quot;boolean&quot;: {
+    parser: function(value) {
+      return !!value;
+    },
     validation: function(value) {
-      return _.isBoolean(value) || value === &quot;true&quot; || value === &quot;false&quot;;
+      return _.isBoolean(value);
+    },
+    postProcess: function(value) {
+      return value;
     },
     matchers: [&quot;eq&quot;, &quot;neq&quot;]
   }
@@ -240,8 +261,7 @@ var NewFilterButtonView = Backbone.View.extend({
 
     // Get current filter
     var fsm = self.filterStateModel;
-    var filterId = fsm.get(&quot;activeFilterId&quot;);
-    var activeFilter = fsm.get(&quot;filterCollection&quot;).get(filterId);
+    var activeFilter = fsm.getActiveFilter();
     activeFilter.get(&quot;attributeFilters&quot;).createNewAttributeFilter();
 
     // Rerender
@@ -459,7 +479,7 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
     var filterId = fsm.get(&quot;activeFilterId&quot;);
 
     // Unbind from previous filter if necessary
-    if (self.activeFilter) {
+    if (self.activeFilter &amp;&amp; fsm.get(&quot;filterCollection&quot;).contains(self.activeFilter)) {
       self.stopListening(self.activeFilter.get(&quot;attributeFilters&quot;));
     }
 
@@ -467,7 +487,7 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
       self.activeFilter = fsm.get(&quot;filterCollection&quot;).get(filterId);
 
       // Add event listener to attribute filter collection
-      self.listenTo(self.activeFilter.get(&quot;attributeFilters&quot;), &quot;add remove&quot;, self.render);
+      self.listenTo(self.activeFilter.get(&quot;attributeFilters&quot;), &quot;add remove reset&quot;, self.render);
     }
     else {
       self.activeFilter = null;
