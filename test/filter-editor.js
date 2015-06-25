@@ -23,6 +23,8 @@ describe("A Backgrid.AdvancedFilter Editor", function () {
   describe("when initialized", function() {
     var ed;
     beforeEach(function () {
+      spyOn(AdvancedFilter.Editor.prototype, "render").and.callThrough();
+
       var dataCollection = new Backbone.Collection(dataHelper.data);
 
       var filters = new AdvancedFilter.FilterCollection({
@@ -64,6 +66,22 @@ describe("A Backgrid.AdvancedFilter Editor", function () {
 
       // Add filter button should be gone now
       expect($(".advancedfilter-editor > div > button.new-attribute-filter").length).toBe(0);
+    });
+
+    it("re-renders the editor once if a new attribute filter is added", function() {
+      var fsm = ed.filterStateModel;
+      var filterId = fsm.get("activeFilterId");
+      var activeFilter = fsm.get("filterCollection").get(filterId);
+
+      ed.render.calls.reset();
+      activeFilter.get("attributeFilters").createNewAttributeFilter();
+      activeFilter.get("attributeFilters").createNewAttributeFilter();
+      activeFilter.get("attributeFilters").createNewAttributeFilter();
+      activeFilter.get("attributeFilters").createNewAttributeFilter();
+      activeFilter.get("attributeFilters").createNewAttributeFilter();
+
+      expect(ed.render).toHaveBeenCalled();
+      expect(ed.render.calls.count()).toEqual(5);
     });
   });
 });

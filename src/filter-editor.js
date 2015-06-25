@@ -50,14 +50,17 @@ var types = {
     matchers: ["sw", "ew", "eq", "neq"]
   },
   "number": {
+    parser: function(value) {
+      return parseFloat(value);
+    },
     validation: function(value) {
-      return _.isNumber(value);
+      return !isNaN(value);
     },
     matchers: ["gt", "lt", "bt", "eq", "neq"]
   },
   "percent": {
     validation: function(value) {
-      return _.isNumber(value) && value >= 0 && value <= 100;
+      return !isNaN(value) && value >= 0 && value <= 100;
     },
     matchers: ["gt", "lt", "bt", "eq", "neq"]
   },
@@ -315,7 +318,34 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
     }
     self.filterStateModel = self.options.filterStateModel;
 
-    self.listenTo(self.filterStateModel, "change:activeFilterId", self.render);
+    self.listenTo(self.filterStateModel, "change:activeFilterId", self.bindFilter);
+
+    self.bindFilter();
+  },
+
+  bindFilter: function() {
+    var self = this;
+
+    // Get current filter
+    var fsm = self.filterStateModel;
+    var filterId = fsm.get("activeFilterId");
+
+    // Unbind from previous filter if necessary
+    if (self.activeFilter) {
+      self.stopListening(self.activeFilter.get("attributeFilters"));
+    }
+
+    if (filterId) {
+      self.activeFilter = fsm.get("filterCollection").get(filterId);
+
+      // Add event listener to attribute filter collection
+      self.listenTo(self.activeFilter.get("attributeFilters"), "add remove", self.render);
+    }
+    else {
+      self.activeFilter = null;
+    }
+
+    self.render();
   },
 
   /**
@@ -327,21 +357,14 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
     var self = this;
     self.$el.empty();
 
-    // Get current filter
-    var fsm = self.filterStateModel;
-    var filterId = fsm.get("activeFilterId");
-
-    if (filterId) {
-      var activeFilter = fsm.get("filterCollection").get(filterId);
-
-      // Add event listener to attribute filter collection
-      self.listenTo(activeFilter.get("attributeFilters"), "add remove", self.render);
+    if (self.activeFilter) {
+      var af = self.activeFilter;
 
       // Loop filters
-      if (activeFilter.get("attributeFilters").length > 0) {
-        activeFilter.get("attributeFilters").each(function(filter) {
+      if (af.get("attributeFilters").length > 0) {
+        af.get("attributeFilters").each(function(filter) {
           var filterView = new Backgrid.Extension.AdvancedFilter.SubComponents.FilterView({
-            filterStateModel: fsm,
+            filterStateModel: self.filterStateModel,
             filter: filter
           });
 
@@ -351,7 +374,7 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
       else {
         // No filters available, render single 'add filter' button
         var newFilterButtonView = new self.options.NewFilterButtonView({
-          filterStateModel: fsm
+          filterStateModel: self.filterStateModel
         });
         self.$el.append(newFilterButtonView.render().$el);
       }

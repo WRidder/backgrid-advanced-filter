@@ -183,3 +183,7 @@ Editor component
 div.advancedfilter-editor button.new-attribute-filter {
     float: right;
 }
+
+div.advancedfilter-editor button.remove-attribute-filter {
+    float: right;
+}
