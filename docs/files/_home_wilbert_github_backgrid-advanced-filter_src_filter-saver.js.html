@@ -260,8 +260,7 @@ Backgrid.Extension.AdvancedFilter.Saver = Backbone.View.extend({
     self.stopEvent(e);
 
     // Get current filter
-    var filter = self.filterStateModel.get(&quot;filterCollection&quot;)
-      .get(self.filterStateModel.get(&quot;activeFilterId&quot;));
+    var filter = self.filterStateModel.getActiveFilter();
 
     // Reset filter name to actual current value
     self.$el.find(&quot;input&quot;).val(filter.get(&quot;name&quot;));

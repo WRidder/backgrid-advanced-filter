@@ -199,8 +199,7 @@ Backgrid.Extension.AdvancedFilter.SubComponents.LabelView = Backbone.View.extend
       self.$el.removeClass(&quot;create&quot;);
 
       // Get filter model
-      var filterModel = self.filterStateModel.get(&quot;filterCollection&quot;)
-        .get(self.filterStateModel.get(&quot;activeFilterId&quot;));
+      var filterModel = self.filterStateModel.getActiveFilter();
 
       // Render
       self.$el.html(self.templates.filterSelected({
@@ -235,6 +234,7 @@ Backgrid.Extension.AdvancedFilter.SubComponents.LabelView = Backbone.View.extend
     var self = this;
     self.stopEvent(e);
     if (self.filterStateModel.get(&quot;activeFilterId&quot;)) {
+      self.filterStateModel.trigger(&quot;filter:save&quot;);
       self.filterStateModel.set(&quot;activeFilterId&quot;, null);
     }
   },

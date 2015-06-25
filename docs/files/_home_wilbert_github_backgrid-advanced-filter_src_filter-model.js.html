@@ -157,6 +157,25 @@ Backgrid.Extension.AdvancedFilter.FilterStateModel = Backbone.Model.extend({
     var self = this;
     var filterId = self.get(&quot;activeFilterId&quot;);
     return self.get(&quot;filterCollection&quot;).get(filterId);
+  },
+
+  setActiveFilter: function(filterToActivate) {
+    var self = this;
+
+    // Remove saved state from current filter
+    self.trigger(&quot;filter:save&quot;);
+
+    var filterId;
+    if (filterToActivate instanceof Backgrid.Extension.AdvancedFilter.FilterModel) {
+      filterId = filterToActivate.cid;
+    }
+    else {
+      filterId = filterToActivate;
+    }
+
+    if (self.get(&quot;filterCollection&quot;).get(filterId)) {
+      self.set(&quot;activeFilterId&quot;, filterId);
+    }
   }
 });
 
