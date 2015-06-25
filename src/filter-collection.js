@@ -50,6 +50,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
     name: null,
     attributeFilters: null
   },
+  lastSavedState: null,
 
   /**
    * @method initialize
@@ -115,10 +116,8 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
   loadSavedState: function() {
     var self = this;
     if (self.lastSavedState) {
-      self.set({
-        name: self.lastSavedState.name,
-        attributeFilters: self.lastSavedState.attributeFilters
-      });
+      self.set("name", self.lastSavedState.name);
+      self.get("attributeFilters").reset(self.lastSavedState.attributeFilters);
     }
   },
 

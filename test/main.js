@@ -239,8 +239,7 @@ describe("A Backgrid.AdvancedFilter Main", function () {
       expect(main.evtCancelFilter.calls.count()).toEqual(1);
 
       // Get filter
-      var filterId = main.filterStateModel.get("activeFilterId");
-      var filter = main.filterStateModel.get("filterCollection").get(filterId);
+      var filter = main.filterStateModel.getActiveFilter();
       var stateBeforeCancel = {
         name: filter.get("name"),
         attributeFilters: filter.get("attributeFilters").toJSON()
@@ -250,20 +249,22 @@ describe("A Backgrid.AdvancedFilter Main", function () {
       expect(triggerSpy).toHaveBeenCalled();
       expect(triggerSpy.calls.count()).toEqual(1);
       expect(triggerSpy).toHaveBeenCalledWith(
-        filterId,
+        filter.cid,
         filter,
         stateBeforeCancel
       );
 
-      main.filterStateModel.get("filterCollection").first().set("attributeFilters", null);
+      filter.get("attributeFilters").reset([]);
+      console.log(filter)
+
       main.filterStateModel.trigger("filter:cancel");
       var currentState1 = {
         name: filter.get("name"),
-        attributeFilters: null
+        attributeFilters: []
       };
 
       expect(triggerSpy).toHaveBeenCalledWith(
-        filterId,
+        filter.cid,
         filter,
         currentState1
       );

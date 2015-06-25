@@ -18,8 +18,14 @@ var matchers = {
   "gt": {
     name: "greater than"
   },
+  "gte": {
+    name: "greater than or equal"
+  },
   "lt": {
     name: "lower than"
+  },
+  "lte": {
+    name: "lower than or equal"
   },
   "eq": {
     name: "equals"
@@ -65,7 +71,7 @@ var types = {
     postProcess: function(value) {
       return value;
     },
-    matchers: ["gt", "lt", "bt", "eq", "neq"]
+    matchers: ["gt", "gte", "lt", "lte", "bt", "eq", "neq"]
   },
   "percent": {
     parser: function(value) {
@@ -77,7 +83,7 @@ var types = {
     postProcess: function(value) {
       return value;
     },
-    matchers: ["gt", "lt", "bt", "eq", "neq"]
+    matchers: ["gt", "gte", "lt", "lte", "bt", "eq", "neq"]
   },
   "boolean": {
     parser: function(value) {
