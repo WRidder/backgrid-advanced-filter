@@ -34,7 +34,7 @@ MongoParser.prototype.parse = function(filter) {
   // Parse filters
   var result = [];
   _.each(validAttributeFilters, function(attrFilter) {
-    result.push(self.parseAttributeFilter(attrFilter));
+    result.push(self.parseAttributeFilter(attrFilter.toJSON()));
   });
 
   return {
@@ -60,26 +60,6 @@ MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
   var self = this;
 
   var result = {};
-  switch (attributeFilter.get("type")) {
-    case "text":
-      result = self.parseTextFilter(attributeFilter.toJSON());
-          break;
-    case "number":
-      result = self.parseNumberFilter(attributeFilter.toJSON());
-          break;
-    case "percent":
-      result = self.parseNumberFilter(attributeFilter.toJSON());
-          break;
-    case "boolean":
-      result = self.parseBooleanFilter(attributeFilter.toJSON());
-          break;
-  }
-
-  return result;
-};
-
-MongoParser.prototype.parseTextFilter = function(attributeFilter) {
-  var result = {};
   switch(attributeFilter.matcher) {
     case "eq":
       result[attributeFilter.column] = {
@@ -99,24 +79,6 @@ MongoParser.prototype.parseTextFilter = function(attributeFilter) {
       break;
     case "ct":
       result[attributeFilter.column] = new RegExp(attributeFilter.value);
-      break;
-  }
-
-  return result;
-};
-
-MongoParser.prototype.parseNumberFilter = function(attributeFilter) {
-  var result = {};
-  switch(attributeFilter.matcher) {
-    case "eq":
-      result[attributeFilter.column] = {
-        "$eq": attributeFilter.value
-      };
-      break;
-    case "neq":
-      result[attributeFilter.column] = {
-        "$neq": attributeFilter.value
-      };
       break;
     case "gt":
       result[attributeFilter.column] = {
@@ -173,24 +135,6 @@ MongoParser.prototype.parseNumberFilter = function(attributeFilter) {
         "$and": [
           firstValnbt, secondValnbt
         ]
-      };
-      break;
-  }
-
-  return result;
-};
-
-MongoParser.prototype.parseBooleanFilter = function(attributeFilter) {
-  var result = {};
-  switch(attributeFilter.matcher) {
-    case "eq":
-      result[attributeFilter.column] = {
-        "$eq": attributeFilter.value
-      };
-      break;
-    case "neq":
-      result[attributeFilter.column] = {
-        "$neq": attributeFilter.value
       };
       break;
   }
