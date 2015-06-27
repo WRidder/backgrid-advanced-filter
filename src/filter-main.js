@@ -9,19 +9,6 @@ var _ = require("underscore");
 var Backbone = require("backbone");
 var Backgrid = require("backgrid");
 
-// Setup root object
-Backgrid.Extension.AdvancedFilter = {
-  SubComponents: {}
-};
-
-// Require submodules
-require("./filter-model");
-require("./filter-collection");
-require("./filter-editor");
-require("./filter-saver");
-require("./filter-dropdown");
-require("./filter-selector");
-
 /**
  * Parent class of the advanced filter.
  * @class AdvancedFilter.Main

@@ -2,7 +2,7 @@
 "use strict";
 
 if (window.wallabyEnv) {
-  require("../src/Backgrid.AdvancedFilter");
+  require("../src/main");
 
   // Helper functions
   var dataHelper = require("./helpers/data.js");

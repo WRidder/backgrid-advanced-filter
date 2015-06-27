@@ -1,7 +1,7 @@
 /* global Backgrid _ Backbone */
 "use strict";
 if (window.wallabyEnv) {
-  require("../src/Backgrid.AdvancedFilter");
+  require("../src/main");
 }
 
 // Convenience variables

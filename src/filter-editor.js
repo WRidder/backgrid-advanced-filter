@@ -10,106 +10,14 @@ var $ = require("jquery");
 var Backbone = require("backbone");
 var Backgrid = require("backgrid");
 
-/**
- * Matchers
- * @property matchers
- */
-var matchers = {
-  "gt": {
-    name: "greater than"
-  },
-  "gte": {
-    name: "greater than or equal"
-  },
-  "lt": {
-    name: "lower than"
-  },
-  "lte": {
-    name: "lower than or equal"
-  },
-  "eq": {
-    name: "equals"
-  },
-  "neq": {
-    name: "does not equal"
-  },
-  "sw": {
-    name: "starts with"
-  },
-  "ew": {
-    name: "ends with"
-  },
-  "bt": {
-    name: "between"
-  }
-};
-
-/**
- * Types
- * @property types
- */
-var types = {
-  "text": {
-    parser: function(value) {
-      return value;
-    },
-    validation: function(value) {
-      return _.isString(value);
-    },
-    postProcess: function(value) {
-      return value;
-    },
-    matchers: ["sw", "ew", "eq", "neq"]
-  },
-  "number": {
-    parser: function(value) {
-      return parseFloat(value);
-    },
-    validation: function(value) {
-      return !isNaN(value);
-    },
-    postProcess: function(value) {
-      return value;
-    },
-    matchers: ["gt", "gte", "lt", "lte", "bt", "eq", "neq"]
-  },
-  "percent": {
-    parser: function(value) {
-      return parseFloat(value);
-    },
-    validation: function(value) {
-      return !isNaN(value) && value >= 0 && value <= 100;
-    },
-    postProcess: function(value) {
-      return value;
-    },
-    matchers: ["gt", "gte", "lt", "lte", "bt", "eq", "neq"]
-  },
-  "boolean": {
-    parser: function(value) {
-      return !!value;
-    },
-    validation: function(value) {
-      return _.isBoolean(value);
-    },
-    postProcess: function(value) {
-      return value;
-    },
-    matchers: ["eq", "neq"]
-  }
-};
-
-/**
- * @class NewFilterButtonView
- * @extends Backbone.View
- */
-var NewFilterButtonView = Backbone.View.extend({
-  template: _.template("<button class=\"new-attribute-filter\"><%-addFilterText%></button>"),
+var ButtonView = Backbone.View.extend({
+  template: _.template("<button class=\"<%-buttonClass%>\"><%-buttonText%></button>"),
   defaults: {
-    addFilterText: "+"
+    buttonText: "+",
+    buttonClass: ""
   },
   events: {
-    "click": "newAttributeFilter"
+    "click": "clickHandler"
   },
   initialize: function(options) {
     var self = this;
@@ -118,7 +26,7 @@ var NewFilterButtonView = Backbone.View.extend({
     // Input argument checking
     if (!self.options.filterStateModel ||
       !self.options.filterStateModel instanceof Backbone.Model) {
-      throw new Error("No (valid) filter state model provided");
+      throw new Error("ButtonView: No (valid) filter state model provided");
     }
     self.filterStateModel = self.options.filterStateModel;
   },
@@ -127,23 +35,16 @@ var NewFilterButtonView = Backbone.View.extend({
     self.$el.empty();
 
     self.$el.append(self.template({
-      addFilterText: self.options.addFilterText
+      buttonText: self.options.buttonText,
+      buttonClass: self.options.buttonClass
     }));
 
     return self;
   },
 
-  newAttributeFilter: function(e) {
+  clickHandler: function(e) {
     var self = this;
     self.stopPropagation(e);
-
-    // Get current filter
-    var fsm = self.filterStateModel;
-    var activeFilter = fsm.getActiveFilter();
-    activeFilter.get("attributeFilters").createNewAttributeFilter();
-
-    // Rerender
-    self.render();
   },
 
   /**
@@ -160,43 +61,35 @@ var NewFilterButtonView = Backbone.View.extend({
   }
 });
 
-var RemoveFilterButtonView = Backbone.View.extend({
-  template: _.template("<button class=\"remove-attribute-filter\"><%-removeFilterText%></button>"),
+/**
+ * @class NewFilterButtonView
+ * @extends Backbone.View
+ */
+var NewFilterButtonView = ButtonView.extend({
   defaults: {
-    removeFilterText: "-"
+    buttonText: "+",
+    buttonClass: "new-attribute-filter"
   },
-  events: {
-    "click": "removeAttributeFilter"
-  },
-  initialize: function(options) {
+  clickHandler: function(e) {
     var self = this;
-    self.options = _.extend({}, self.defaults, options || {});
+    self.stopPropagation(e);
 
-    // Input argument checking
-    if (!self.options.filterStateModel ||
-      !self.options.filterStateModel instanceof Backbone.Model) {
-      throw new Error("No (valid) filter state model provided");
-    }
-    self.filterStateModel = self.options.filterStateModel;
+    // Get current filter
+    var fsm = self.filterStateModel;
+    var activeFilter = fsm.getActiveFilter();
+    activeFilter.get("attributeFilters").createNewAttributeFilter();
 
-    if (!self.options.filter ||
-      !self.options.filter instanceof Backbone.Model) {
-      throw new Error("No (valid) filter model provided");
-    }
-    self.filter = self.options.filter;
+    // Rerender
+    self.render();
+  }
+});
+
+var RemoveFilterButtonView = ButtonView.extend({
+  defaults: {
+    buttonText: "-",
+    buttonClass: "remove-attribute-filter"
   },
-  render: function() {
-    var self = this;
-    self.$el.empty();
-
-    self.$el.append(self.template({
-      removeFilterText: self.options.removeFilterText
-    }));
-
-    return self;
-  },
-
-  removeAttributeFilter: function(e) {
+  clickHandler: function(e) {
     var self = this;
     self.stopPropagation(e);
 
@@ -208,23 +101,10 @@ var RemoveFilterButtonView = Backbone.View.extend({
 
     // Rerender
     self.render();
-  },
-
-  /**
-   * Convenience function to stop event propagation
-   *
-   * @method stopPropagation
-   * @param {object} e
-   * @private
-   */
-  stopPropagation: function (e) {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    e.preventDefault();
   }
 });
 
-var ColumnSelector = Backbone.View.extend({
+var ColumnSelectorView = Backbone.View.extend({
   className: "column-selector",
   tagName: "select",
   events: {
@@ -252,21 +132,136 @@ var ColumnSelector = Backbone.View.extend({
   }
 });
 
-Backgrid.Extension.AdvancedFilter.SubComponents.FilterView = Backbone.View.extend({
-  className: "filter-editor",
+var MatcherSelectorView = Backbone.View.extend({
+  className: "matcher-selector",
+  tagName: "select",
+  events: {
+    "change": "matcherUpdate"
+  },
+
+  render: function() {
+    var self = this;
+    self.$el.empty();
+
+    // Add select options
+    self.$el.append($("<option></option>")
+      .attr("value", "test")
+      .text("test!"));
+
+    self.$el.append($("<option></option>")
+      .attr("value", "test2")
+      .text("test2!"));
+
+    self.$el.append($("<option></option>")
+      .attr("value", "test3")
+      .text("test3!"));
+
+    return self;
+  },
+
+  matcherUpdate: function() {
+    console.log("matcher change!");
+  }
+});
+
+var ValueView = Backbone.View.extend({
+  className: "valuer",
+  tagName: "input",
+  events: {
+    "change": "valueUpdate"
+  },
+
+  initialize: function(options) {
+    var self = this;
+    self.options = _.extend({}, self.defaults, options || {});
+
+    // Input argument checking
+    if (!self.options.filter ||
+      !self.options.filter instanceof Backbone.Model) {
+      throw new Error("No (valid) filter state model provided");
+    }
+    self.filter = self.options.filter;
+  },
+
+  /**
+   * @method render
+   * @return {ValueView}
+   */
+  render: function() {
+    var self = this;
+    self.$el.empty();
+
+    self.$el.val(self.filter.get("value"));
+    return self;
+  },
+
+  matcherUpdate: function() {
+    console.log("matcher change!");
+    self.filter.set("value", self.$el.val());
+  }
+});
+
+var ColumnFilter = Backbone.View.extend({
+  className: "column-filter",
   tagName: "div",
   template: _.template("" +
     "<div class=\"filter-editor-column\">" +
     "<div class=\"filter-editor-matcher\">" +
     "<div class=\"filter-editor-value\">" +
+    ""
+  ),
+  events: {
+    "change": "columnUpdate"
+  },
+  defaults: {
+    ColumnSelectorView: ColumnSelectorView,
+    MatcherView: MatcherSelectorView,
+    ValueView: ValueView
+  },
+
+  initialize: function(options) {
+    var self = this;
+    self.options = _.extend({}, self.defaults, options || {});
+
+    // Input argument checking
+    if (!self.options.filter ||
+      !self.options.filter instanceof Backbone.Model) {
+      throw new Error("No (valid) filter state model provided");
+    }
+    self.filter = self.options.filter;
+  },
+
+  render: function() {
+    var self = this;
+    self.$el.empty();
+
+    // Render template
+    self.$el.append(self.template());
+
+    // Add select options
+    self.$el.append($("<option></option>")
+      .attr("value", "test")
+      .text("test!"));
+
+    self.$el.append($("<option></option>")
+      .attr("value", "test2")
+      .text("test2!"));
+
+    return self;
+  }
+});
+
+Backgrid.Extension.AdvancedFilter.SubComponents.FilterView = Backbone.View.extend({
+  className: "filter-editor",
+  tagName: "div",
+  template: _.template("" +
+    "<div class=\"filter-editor-columnfilter\">" +
     "<div class=\"filter-editor-addremove\">" +
   ""),
   defaults: {
-    ColumnSelectorView: ColumnSelector,
+    ColumnFilterView: ColumnFilter,
     NewFilterButtonView: NewFilterButtonView,
-    RemoveFilterButtonView: RemoveFilterButtonView,
-    matchers: matchers,
-    types: types
+    RemoveFilterButtonView: RemoveFilterButtonView
   },
 
   initialize: function(options) {
@@ -297,8 +292,10 @@ Backgrid.Extension.AdvancedFilter.SubComponents.FilterView = Backbone.View.exten
     self.$el.append(self.template());
 
     // Add column selector
-    var selectorView = new this.options.ColumnSelectorView();
-    self.$el.find(".filter-editor-column").append(selectorView.render().$el);
+    var columnFilterView = new this.options.ColumnFilterView({
+      filter: self.filter
+    });
+    self.$el.find(".filter-editor-column").append(columnFilterView.render().$el);
 
     // Add attribute filter view
     var addAttributeFilterView = new this.options.NewFilterButtonView({

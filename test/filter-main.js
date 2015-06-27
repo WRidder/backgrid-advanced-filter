@@ -2,7 +2,7 @@
 "use strict";
 
 if (window.wallabyEnv) {
-  require("../src/Backgrid.AdvancedFilter");
+  require("../src/main");
 }
 
 // Convenience variables
@@ -96,18 +96,14 @@ describe("A Backgrid.AdvancedFilter Main", function () {
             {
               column: "testcol",
               type: "text",
-              settings: {
-                matcher: "equals",
-                value: "someValue"
-              }
+              matcher: "equals",
+              value: "someValue"
             },
             {
               column: "testcol1",
               type: "text",
-              settings: {
-                matcher: "startsWith",
-                value: "thisValue"
-              }
+              matcher: "startsWith",
+              value: "thisValue"
             }
           ]
         },
@@ -116,10 +112,8 @@ describe("A Backgrid.AdvancedFilter Main", function () {
           attributeFilters: {
             column: "testcol",
             type: "text",
-            settings: {
-              matcher: "equals",
-              value: "someValue"
-            }
+            matcher: "equals",
+            value: "someValue"
           }
         }
       ]);

@@ -1,7 +1,7 @@
 /* global Backgrid _ Backbone */
 "use strict";
 if (window.wallabyEnv) {
-  require("../src/Backgrid.AdvancedFilter");
+  require("../src/main");
 }
 
 // Convenience variables
@@ -52,10 +52,8 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
       type: "text",
-      settings: {
-        matcher: "contains",
-        value: "anything"
-      }
+      matcher: "contains",
+      value: "anything"
     }));
 
     // Save current state
@@ -66,10 +64,9 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       attributeFilters: [{
         column: "firstColumn",
         type: "text",
-        settings: {
-          matcher: "contains",
-          value: "anything"
-        }
+        matcher: "contains",
+        value: "anything",
+        valid: false
       }]
     });
   });
@@ -79,10 +76,8 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
       type: "text",
-      settings: {
-        matcher: "contains",
-        value: "anything"
-      }
+      matcher: "contains",
+      value: "anything"
     }));
 
     // Save current state
@@ -93,10 +88,9 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       attributeFilters: [{
         column: "firstColumn",
         type: "text",
-        settings: {
-          matcher: "contains",
-          value: "anything"
-        }
+        matcher: "contains",
+        value: "anything",
+        valid: false
       }]
     });
 
@@ -112,10 +106,9 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       attributeFilters: [{
         column: "secondColumn",
         type: "text",
-        settings: {
-          matcher: "contains",
-          value: "anything"
-        }
+        matcher: "contains",
+        value: "anything",
+        valid: false
       }]
     });
 
@@ -131,10 +124,9 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       attributeFilters: [{
         column: "firstColumn",
         type: "text",
-        settings: {
-          matcher: "contains",
-          value: "anything"
-        }
+        matcher: "contains",
+        value: "anything",
+        valid: false
       }]
     });
   });
@@ -144,10 +136,8 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
       type: "text",
-      settings: {
-        matcher: "contains",
-        value: "anything"
-      }
+      matcher: "contains",
+      value: "anything"
     }));
 
     // Save current state
@@ -256,12 +246,12 @@ describe("A Backgrid.AdvancedFilter Attribute filter model", function () {
     expect(afm instanceof Backbone.Model).toBe(true);
   });
 
-  it("has three predefined attributes", function() {
+  it("has four predefined attributes", function() {
     var modelKeys = _.keys(afm.attributes);
     modelKeys.sort();
 
-    expect(modelKeys.length).toBe(3);
-    expect(modelKeys).toEqual(["column", "settings", "type"]);
+    expect(modelKeys.length).toBe(5);
+    expect(modelKeys).toEqual(["column", "matcher", "type",  "valid", "value"]);
   });
 });
 

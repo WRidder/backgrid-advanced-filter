@@ -20,6 +20,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "AdvancedFilter",
         "AdvancedFilter.Editor",
         "AdvancedFilter.FilterCollection",
+        "AdvancedFilter.FilterOptions",
         "AdvancedFilter.FilterStateModel",
         "AdvancedFilter.Saver",
         "AdvancedFilter.Selector",
@@ -39,6 +40,11 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "AdvancedFilter.FilterCollection",
             "name": "AdvancedFilter.FilterCollection",
+            "description": "Filter collection definition"
+        },
+        {
+            "displayName": "AdvancedFilter.FilterOptions",
+            "name": "AdvancedFilter.FilterOptions",
             "description": "Filter collection definition"
         },
         {

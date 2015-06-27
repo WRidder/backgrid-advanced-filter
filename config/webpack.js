@@ -9,7 +9,7 @@ var webpack = require("webpack");
  */
 module.exports = function (release) {
   return {
-    entry: "./src/Backgrid.AdvancedFilter.js",
+    entry: "./src/main.js",
 
     output: {
       filename: (release) ? "lib/Backgrid.AdvancedFilter.min.js" : "lib/Backgrid.AdvancedFilter.js",

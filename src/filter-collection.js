@@ -18,7 +18,20 @@ var attributeFilterModel = Backgrid.Extension.AdvancedFilter.AttributeFilterMode
   defaults: {
     column: null,
     type: null,
-    settings: null
+    matcher: null,
+    value: null,
+    valid: false
+  },
+
+  initialize: function() {
+    var self = this;
+
+    // Events
+    self.listenTo(self, "change:column change:type change:matcher change:value", self.checkValidity);
+  },
+
+  checkValidity: function() {
+
   }
 });
 
