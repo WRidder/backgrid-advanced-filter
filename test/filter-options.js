@@ -19,7 +19,7 @@ describe("A Backgrid.AdvancedFilter filter", function () {
     });
 
     it("supports 'starts with', 'ends with', 'equals' and 'does not equal'", function(){
-      expect(typeMatchers).toEqual(["sw", "ew", "eq", "neq"]);
+      expect(typeMatchers).toEqual(["sw", "ew", "eq", "neq", "ct"]);
     });
 
     it("has a parser which just returns the same value", function () {

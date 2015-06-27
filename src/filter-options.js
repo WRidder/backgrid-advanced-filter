@@ -38,8 +38,14 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Matchers = {
   "ew": {
     name: "ends with"
   },
+  "ct": {
+    name: "contains"
+  },
   "bt": {
     name: "between"
+  },
+  "nbt": {
+    name: "outside"
   }
 };
 
@@ -58,7 +64,7 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     postProcess: function(value) {
       return value.trim();
     },
-    matchers: ["sw", "ew", "eq", "neq"]
+    matchers: ["sw", "ew", "eq", "neq", "ct"]
   },
   "number": {
     parser: function(value) {
@@ -70,7 +76,7 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     postProcess: function(value) {
       return value;
     },
-    matchers: ["gt", "gte", "lt", "lte", "bt", "eq", "neq"]
+    matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"]
   },
   "percent": {
     parser: function(value) {
@@ -82,7 +88,7 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     postProcess: function(value) {
       return value / 100;
     },
-    matchers: ["gt", "gte", "lt", "lte", "bt", "eq", "neq"]
+    matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"]
   },
   "boolean": {
     parser: function(value) {

@@ -14,6 +14,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "AdvancedFilter.Subcomponents.FilterDropdownContainer",
         "AdvancedFilter.Subcomponents.FilterDropdownItemview",
         "FilterStateModel",
+        "MongoParser",
         "NewFilterButtonView"
     ],
     "modules": [
@@ -21,6 +22,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "AdvancedFilter.Editor",
         "AdvancedFilter.FilterCollection",
         "AdvancedFilter.FilterOptions",
+        "AdvancedFilter.FilterParsers",
         "AdvancedFilter.FilterStateModel",
         "AdvancedFilter.Saver",
         "AdvancedFilter.Selector",
@@ -45,6 +47,11 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "AdvancedFilter.FilterOptions",
             "name": "AdvancedFilter.FilterOptions",
+            "description": "Filter collection definition"
+        },
+        {
+            "displayName": "AdvancedFilter.FilterParsers",
+            "name": "AdvancedFilter.FilterParsers",
             "description": "Filter collection definition"
         },
         {

@@ -20,4 +20,5 @@ require("./filter-editor");
 require("./filter-saver");
 require("./filter-dropdown");
 require("./filter-selector");
+require("./filter-parsers");
 require("./filter-main");
