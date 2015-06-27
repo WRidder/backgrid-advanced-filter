@@ -72,7 +72,8 @@ An advanced filter plugin for Backgrid.
 - Checkout locally using git
 - Run `npm install`
 - Run `gulp` to watch for changes and build + test the library
-- Edit files in `/src`
+- Edit files in `/src` + add/adjust tests
+- Make sure lint and tests pass
 - Commit to your fork and create a PR (Pull request) with the changes
 
 ## Authors

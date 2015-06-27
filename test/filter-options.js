@@ -12,14 +12,14 @@ var Matchers = AdvancedFilter.FilterOptions.Matchers;
 describe("A Backgrid.AdvancedFilter filter", function () {
   describe("of type Text", function () {
     var typeFilter = FilterTypes.text;
-    var typeMatchers = typeFilter.matchers;
+    var typeMatchers = typeFilter.matchers.sort();
 
     it("has matchers which are defined in the Matchers list", function () {
       expect(_.intersection(typeMatchers, _.keys(Matchers)).length).toEqual(typeMatchers.length);
     });
 
     it("supports 'starts with', 'ends with', 'equals' and 'does not equal'", function(){
-      expect(typeMatchers).toEqual(["sw", "ew", "eq", "neq", "ct"]);
+      expect(typeMatchers).toEqual(["ct", "eq", "ew", "neq", "sw"]);
     });
 
     it("has a parser which just returns the same value", function () {
@@ -43,7 +43,7 @@ describe("A Backgrid.AdvancedFilter filter", function () {
 
   describe("of type Number", function () {
     var typeFilter = FilterTypes.number;
-    var typeMatchers = typeFilter.matchers;
+    var typeMatchers = typeFilter.matchers.sort();
 
     it("has matchers which are defined in the Matchers list", function () {
       expect(_.intersection(typeMatchers, _.keys(Matchers)).length).toEqual(typeMatchers.length);
@@ -51,7 +51,7 @@ describe("A Backgrid.AdvancedFilter filter", function () {
 
     it("supports 'greater than', 'greater than or equals', 'lower than', " +
       "'lower than or equals', 'between', 'equals' and 'does not equal'", function(){
-      expect(typeMatchers).toEqual(["gt", "gte", "lt", "lte", "bt", "eq", "neq"]);
+      expect(typeMatchers).toEqual(["bt", "eq", "gt", "gte", "lt", "lte", "nbt", "neq"]);
     });
 
     it("has a parser which parses the value as a float", function () {
@@ -80,7 +80,7 @@ describe("A Backgrid.AdvancedFilter filter", function () {
 
   describe("of type Percent", function () {
     var typeFilter = FilterTypes.percent;
-    var typeMatchers = typeFilter.matchers;
+    var typeMatchers = typeFilter.matchers.sort();
 
     it("has matchers which are defined in the Matchers list", function () {
       expect(_.intersection(typeMatchers, _.keys(Matchers)).length).toEqual(typeMatchers.length);
@@ -88,7 +88,7 @@ describe("A Backgrid.AdvancedFilter filter", function () {
 
     it("supports 'greater than', 'greater than or equals', 'lower than', " +
       "'lower than or equals', 'between', 'equals' and 'does not equal'", function(){
-      expect(typeMatchers).toEqual(["gt", "gte", "lt", "lte", "bt", "eq", "neq"]);
+      expect(typeMatchers).toEqual(["bt", "eq", "gt", "gte", "lt", "lte", "nbt", "neq"]);
     });
 
     it("has a parser which parses the value as a float", function () {

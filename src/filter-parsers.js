@@ -57,8 +57,6 @@ MongoParser.prototype.getValidOnly = function(filter) {
 };
 
 MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
-  var self = this;
-
   var result = {};
   switch(attributeFilter.matcher) {
     case "eq":
