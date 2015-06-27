@@ -14,11 +14,11 @@ Backgrid.Extension.AdvancedFilter = {
 
 // Require submodules
 require("./filter-options");
+require("./filter-parsers");
 require("./filter-model");
 require("./filter-collection");
 require("./filter-editor");
 require("./filter-saver");
 require("./filter-dropdown");
 require("./filter-selector");
-require("./filter-parsers");
 require("./filter-main");

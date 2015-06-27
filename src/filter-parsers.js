@@ -56,6 +56,12 @@ MongoParser.prototype.getValidOnly = function(filter) {
   return attributeFilters.where({valid: true});
 };
 
+/**
+ * @method parseAttributeFilter
+ * @param {Object} attributeFilter
+ * @return {Object} mongo style filter
+ * @private
+ */
 MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
   var result = {};
   switch(attributeFilter.matcher) {

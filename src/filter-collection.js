@@ -69,7 +69,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
   /**
    * @method initialize
    */
-  initialize: function() {
+  initialize: function () {
     var self = this;
 
     // Save the initial state so we can cancel changes later.
@@ -83,7 +83,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
   /**
    * @method evtFilterChanged
    */
-  evtFilterChanged: function() {
+  evtFilterChanged: function () {
     var self = this;
     self.filterChanged = true;
 
@@ -93,7 +93,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
   /**
    * @method saveFilter
    */
-  saveFilter: function() {
+  saveFilter: function () {
     var self = this;
     self.saveState();
   },
@@ -101,7 +101,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
   /**
    * @method resetFilter
    */
-  resetFilter: function() {
+  resetFilter: function () {
     var self = this;
     self.get("attributeFilters").reset([]);
   },
@@ -109,7 +109,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
   /**
    * @method cancelFilter
    */
-  cancelFilter: function() {
+  cancelFilter: function () {
     var self = this;
     self.loadSavedState();
   },
@@ -118,7 +118,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
    * @method saveState
    * @private
    */
-  saveState: function() {
+  saveState: function () {
     var self = this;
 
     var name = self.get("name");
@@ -143,7 +143,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
    * @method loadSavedState
    * @private
    */
-  loadSavedState: function() {
+  loadSavedState: function () {
     var self = this;
     if (self.lastSavedState) {
       self.set("name", self.lastSavedState.name);
@@ -154,7 +154,7 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
   /**
    * @method removeSavedState
    */
-  removeSavedState: function() {
+  removeSavedState: function () {
     var self = this;
     self.lastSavedState = null;
   },
@@ -168,13 +168,32 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
    * @param {Object} options
    * @return {*}
    */
-  set: function(attributes, options) {
+  set: function (attributes, options) {
     var AttrCollection = Backgrid.Extension.AdvancedFilter.AttributeFilterCollection;
-    if (attributes.attributeFilters !== undefined &&
-      !(attributes.attributeFilters instanceof AttrCollection)) {
+    if (attributes.attributeFilters !== undefined && !(attributes.attributeFilters instanceof AttrCollection)) {
       attributes.attributeFilters = new AttrCollection(attributes.attributeFilters);
     }
     return Backbone.Model.prototype.set.call(this, attributes, options);
+  },
+
+  /**
+   * Export the filter for a given style
+   * @method exportFilter
+   * @param {String} style. Values: "mongo"
+   * @return {Object}
+   */
+  exportFilter: function (style) {
+    var self = this;
+
+    var result;
+    switch (style) {
+      case "mongo":
+      case "mongodb":
+      default:
+        var mongoParser = new Backgrid.Extension.AdvancedFilter.FilterParsers.MongoParser();
+        result = mongoParser.parse(self);
+    }
+    return result;
   }
 });
 

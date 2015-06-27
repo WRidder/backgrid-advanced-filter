@@ -145,6 +145,29 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     expect(fm.toJSON().name).toEqual("Test filter 1");
     expect(fm.toJSON().attributeFilters.length).toEqual(0);
   });
+
+  it("can export the filter mongo style", function() {
+    fm.set("name", "Test filter 1");
+    fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
+      column: "firstColumn",
+      type: "text",
+      matcher: "sw",
+      value: "anything",
+      valid: true
+    }));
+
+    // Get filter export
+    var mongoFilter = fm.exportFilter("mongo");
+
+    // Save current state
+    expect(mongoFilter).toEqual({
+      "$and": [
+        {
+        "firstColumn": /^anything/
+        }
+      ]
+    });
+  });
 });
 
 describe("A Backgrid.AdvancedFilter Filter collection", function () {
@@ -212,18 +235,14 @@ describe("A Backgrid.AdvancedFilter Filter collection", function () {
     var lastFilter = fc.last();
     lastFilter.get("attributeFilters").add([
       {
-      column: "testcol",
-      type: "text",
-      settings: {
+        column: "testcol",
+        type: "text",
         value: "test"
-      }
-    },
+      },
       {
         column: "testcol",
         type: "text",
-        settings: {
-          value: "test"
-        }
+        value: "test"
       }
     ]);
     expect(lastFilter.get("attributeFilters").length).toBe(2);
