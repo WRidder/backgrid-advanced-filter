@@ -1,6 +1,6 @@
 # Backgrid advanced filter
 An advanced filter plugin for Backgrid.
-[Online demo (will be added soon)](https://wridder.github.io/backgrid-demo/)
+[Online demo](https://wridder.github.io/backgrid-demo/)
 
 ## Example usage
 **Initialization**  
