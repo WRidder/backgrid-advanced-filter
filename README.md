@@ -48,7 +48,10 @@ An advanced filter plugin for Backgrid.
 ```javascript
     advancedFilter.on("filter:save", function(filterId, filterModel) {
         // Get filter definition (default is mongo style)
-        var definition = filterModel.getFilterDefinition("mongo");
+        var definition = filterModel.exportFilter("mongo");
+        
+        // Or get it as string
+        var definitionString = filterModel.exportFilter("mongo", true);
         
         // Request new data using filter
         dataSource(filter).success(function(filteredData) {
@@ -57,10 +60,7 @@ An advanced filter plugin for Backgrid.
     });
 ```  
 
-## Roadmap
-- Filter editor
-  - Finalize filters for boolean, number, string and percent columns
-  - Validation / error handling
+## Roadmap / TODO
 - API reference example
 
 ## Dependencies
