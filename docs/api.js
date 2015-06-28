@@ -15,7 +15,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "AdvancedFilter.Subcomponents.FilterDropdownItemview",
         "FilterStateModel",
         "MongoParser",
-        "NewFilterButtonView"
+        "NewFilterButtonView",
+        "RemoveFilterButtonView"
     ],
     "modules": [
         "AdvancedFilter",

@@ -1,4 +1,4 @@
-/* global Backgrid _ */
+/* global Backgrid */
 "use strict";
 if (window.wallabyEnv) {
   require("../src/main");
@@ -14,7 +14,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
     mongoParser = new AdvancedFilter.FilterParsers.MongoParser();
   });
 
-  it("creates a mongo style json object when parsing a filter model", function() {
+  it("creates a MongoDB query style json object when parsing a filter model", function() {
     describe("for text type attribute filters", function() {
       // Create filter
       var filter = new AdvancedFilter.FilterModel({
@@ -64,20 +64,35 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
       // Compare results
       expect(mongoStyleFilter).toEqual({
         "$and": [
+          // Starts with
           {
-            "name": /^James/
+            "name": {
+              "$regex": "^James"
+            }
           },
+
+          // Ends with
           {
-            "name": /Root$/
+            "name": {
+              "$regex": "Root$"
+            }
           },
+
+          // Contains
           {
-            "name": /William/
+            "name": {
+              "$regex": "William"
+            }
           },
+
+          // Equals
           {
             "name": {
               "$eq": "James William Root"
             }
           },
+
+          // Does not equal
           {
             "name": {
               "$neq": "Corey Tailor"
@@ -157,26 +172,34 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
       // Compare results
       expect(mongoStyleFilter).toEqual({
         "$and": [
+          // Greater than
           {
             "age": {
               "$gt": 5
             }
           },
+
+          // Greater than or equal
           {
             "age": {
               "$gte": 10
             }
           },
+
+          // Lower than
           {
             "age": {
               "$lt": 50
             }
           },
+
+          // Lower than or equal
           {
             "age": {
               "$lte": 40
             }
           },
+
           // Between
           {
             "$and": [
@@ -192,6 +215,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
               }
             ]
           },
+
           // Outside
           {
             "$and": [
@@ -207,6 +231,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
               }
             ]
           },
+
           // Equals
           {
             "age": {
@@ -214,7 +239,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
             }
           },
 
-          // Not equal
+          // Does not equal
           {
             "age": {
               "$neq": 20

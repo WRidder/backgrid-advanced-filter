@@ -8,6 +8,9 @@
 var Backbone = require("backbone");
 var Backgrid = require("backgrid");
 var _ = require("underscore");
+var Matchers = Backgrid.Extension.AdvancedFilter.FilterOptions.Matchers;
+var FilterTypes = Backgrid.Extension.AdvancedFilter.FilterOptions.Types;
+var MatchersValueTypeValidator = Backgrid.Extension.AdvancedFilter.FilterOptions.MatchersValueTypeValidator;
 
 /**
  *
@@ -31,7 +34,27 @@ var attributeFilterModel = Backgrid.Extension.AdvancedFilter.AttributeFilterMode
   },
 
   checkValidity: function() {
+    var self = this;
+    var valid = false;
 
+    // Check if type exists
+    var type = self.get("type");
+    var matcher = self.get("matcher");
+    var value = self.get("value");
+    if (_.has(FilterTypes, type)) {
+
+      // Check if matcher belongs to type
+      if (!_.contains(FilterTypes[type].matchers)) {
+
+        // Check if the type of value is valid for current matcher
+        var matcherValueType = Matchers[matcher].valueType;
+        if (MatchersValueTypeValidator[matcherValueType](value)) {
+          // Validate the value
+          valid = FilterTypes[type].validator(value);
+        }
+      }
+    }
+    self.set("valid", valid);
   }
 });
 
@@ -179,10 +202,11 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
   /**
    * Export the filter for a given style
    * @method exportFilter
-   * @param {String} style. Values: "mongo"
+   * @param {String} style. Values: "(mongo|mongodb), ..."
+   * @param {boolean} exportAsString exports as a string if true.
    * @return {Object}
    */
-  exportFilter: function (style) {
+  exportFilter: function (style, exportAsString) {
     var self = this;
 
     var result;
@@ -192,6 +216,26 @@ var FilterModel = Backgrid.Extension.AdvancedFilter.FilterModel = Backbone.Model
       default:
         var mongoParser = new Backgrid.Extension.AdvancedFilter.FilterParsers.MongoParser();
         result = mongoParser.parse(self);
+
+        if (exportAsString) {
+          result = self.stringifyFilterJson(result);
+        }
+    }
+    return result;
+  },
+
+  /**
+   * @method stringifyFilterJson
+   * @param {Object} filterObj
+   * @param {String} style. Values: "(mongo|mongodb), ..."
+   */
+  stringifyFilterJson: function(filterObj, style) {
+    var result;
+    switch (style) {
+      case "mongo":
+      case "mongodb":
+      default:
+        result = JSON.stringify(filterObj);
     }
     return result;
   }

@@ -36,10 +36,8 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
       type: "text",
-      settings: {
-        matcher: "contains",
-        value: "anything"
-      }
+      matcher: "ct",
+      value: "anything"
     }));
 
     fm.resetFilter();
@@ -52,7 +50,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
       type: "text",
-      matcher: "contains",
+      matcher: "ct",
       value: "anything"
     }));
 
@@ -64,7 +62,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       attributeFilters: [{
         column: "firstColumn",
         type: "text",
-        matcher: "contains",
+        matcher: "ct",
         value: "anything",
         valid: false
       }]
@@ -76,8 +74,9 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
       type: "text",
-      matcher: "contains",
-      value: "anything"
+      matcher: "ct",
+      value: "anything",
+      valid: true
     }));
 
     // Save current state
@@ -88,9 +87,9 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       attributeFilters: [{
         column: "firstColumn",
         type: "text",
-        matcher: "contains",
+        matcher: "ct",
         value: "anything",
-        valid: false
+        valid: true
       }]
     });
 
@@ -106,9 +105,9 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       attributeFilters: [{
         column: "secondColumn",
         type: "text",
-        matcher: "contains",
+        matcher: "ct",
         value: "anything",
-        valid: false
+        valid: true
       }]
     });
 
@@ -124,9 +123,9 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       attributeFilters: [{
         column: "firstColumn",
         type: "text",
-        matcher: "contains",
+        matcher: "ct",
         value: "anything",
-        valid: false
+        valid: true
       }]
     });
   });
@@ -136,7 +135,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
       type: "text",
-      matcher: "contains",
+      matcher: "ct",
       value: "anything"
     }));
 
@@ -163,10 +162,29 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     expect(mongoFilter).toEqual({
       "$and": [
         {
-        "firstColumn": /^anything/
+          "firstColumn": {
+            "$regex": "^anything"
+          }
         }
       ]
     });
+  });
+
+  it("can export the filter mongo style as a string", function() {
+    fm.set("name", "Test filter 2");
+    fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
+      column: "firstColumn",
+      type: "text",
+      matcher: "sw",
+      value: "anything",
+      valid: true
+    }));
+
+    // Get filter export
+    var mongoFilterString = fm.exportFilter("mongodb", true);
+
+    // Save current state
+    expect(mongoFilterString).toEqual("{\"$and\":[{\"firstColumn\":{\"$regex\":\"^anything\"}}]}");
   });
 });
 
@@ -237,11 +255,13 @@ describe("A Backgrid.AdvancedFilter Filter collection", function () {
       {
         column: "testcol",
         type: "text",
+        matcher: "eq",
         value: "test"
       },
       {
         column: "testcol",
         type: "text",
+        matcher: "eq",
         value: "test"
       }
     ]);
@@ -270,7 +290,7 @@ describe("A Backgrid.AdvancedFilter Attribute filter model", function () {
     modelKeys.sort();
 
     expect(modelKeys.length).toBe(5);
-    expect(modelKeys).toEqual(["column", "matcher", "type",  "valid", "value"]);
+    expect(modelKeys).toEqual(["column", "matcher", "type", "valid", "value"]);
   });
 });
 

@@ -84,6 +84,10 @@ var NewFilterButtonView = ButtonView.extend({
   }
 });
 
+/**
+ * @class RemoveFilterButtonView
+ * @extends Backbone.View
+ */
 var RemoveFilterButtonView = ButtonView.extend({
   defaults: {
     buttonText: "-",
@@ -138,34 +142,52 @@ var MatcherSelectorView = Backbone.View.extend({
   events: {
     "change": "matcherUpdate"
   },
+  defaults: {},
 
+  /**
+   * @method initialize
+   * @param options
+   */
+  initialize: function(options) {
+    var self = this;
+    self.options = _.extend({}, self.defaults, options || {});
+
+    // Input argument checking
+    if (!self.options.filter ||
+      !self.options.filter instanceof Backbone.Model) {
+      throw new Error("No (valid) filter state model provided");
+    }
+    self.filter = self.options.filter;
+  },
+
+  /**
+   * @method render
+   * @return {MatcherSelectorView}
+   */
   render: function() {
     var self = this;
     self.$el.empty();
 
     // Add select options
-    self.$el.append($("<option></option>")
-      .attr("value", "test")
-      .text("test!"));
-
-    self.$el.append($("<option></option>")
-      .attr("value", "test2")
-      .text("test2!"));
-
-    self.$el.append($("<option></option>")
-      .attr("value", "test3")
-      .text("test3!"));
-
+    _.each(self.options.selectValues, function(selectValue) {
+      self.$el.append($("<option></option>")
+        .attr("value", selectValue.value)
+        .text(selectValue.text));
+    });
     return self;
   },
 
+  /**
+   * @method matcherUpdate
+   */
   matcherUpdate: function() {
-    console.log("matcher change!");
+    var self = this;
+    self.filter.set("matcher", self.$el.val());
   }
 });
 
-var ValueView = Backbone.View.extend({
-  className: "valuer",
+var SingleValueView = Backbone.View.extend({
+  className: "single-value-input",
   tagName: "input",
   events: {
     "change": "valueUpdate"
@@ -195,28 +217,21 @@ var ValueView = Backbone.View.extend({
     return self;
   },
 
-  matcherUpdate: function() {
-    console.log("matcher change!");
+  valueUpdate: function() {
+    console.log("Value change!");
     self.filter.set("value", self.$el.val());
   }
 });
 
-var ColumnFilter = Backbone.View.extend({
-  className: "column-filter",
+var ValueContainerView = Backbone.View.extend({
+  className: "matcher-container",
   tagName: "div",
-  template: _.template("" +
-    "<div class=\"filter-editor-column\">" +
-    "<div class=\"filter-editor-matcher\">" +
-    "<div class=\"filter-editor-value\">" +
-    ""
-  ),
-  events: {
-    "change": "columnUpdate"
-  },
   defaults: {
-    ColumnSelectorView: ColumnSelectorView,
-    MatcherView: MatcherSelectorView,
-    ValueView: ValueView
+    SingleValueView: SingleValueView
+    /*
+    DoubleValueView: DoubleValueView,
+    BoolValueView: BoolValueView
+     */
   },
 
   initialize: function(options) {
@@ -231,6 +246,47 @@ var ColumnFilter = Backbone.View.extend({
     self.filter = self.options.filter;
   },
 
+  /**
+   * @method render
+   * @return {ColumnFilter}
+   */
+  render: function() {
+    var self = this;
+    self.$el.empty();
+
+    return self;
+  }
+});
+
+var MatcherContainerView = Backbone.View.extend({
+  className: "matcher-container",
+  tagName: "div",
+  template: _.template("" +
+    "<div class=\"matcher-selector\">" +
+    "<div class=\"matcher-value\">" +
+    ""
+  ),
+  defaults: {
+    MatcherSelectorView: MatcherSelectorView,
+    ValueContainerView: ValueContainerView
+  },
+
+  initialize: function(options) {
+    var self = this;
+    self.options = _.extend({}, self.defaults, options || {});
+
+    // Input argument checking
+    if (!self.options.filter ||
+      !self.options.filter instanceof Backbone.Model) {
+      throw new Error("No (valid) filter state model provided");
+    }
+    self.filter = self.options.filter;
+  },
+
+  /**
+   * @method render
+   * @return {ColumnFilter}
+   */
   render: function() {
     var self = this;
     self.$el.empty();
@@ -238,16 +294,92 @@ var ColumnFilter = Backbone.View.extend({
     // Render template
     self.$el.append(self.template());
 
-    // Add select options
-    self.$el.append($("<option></option>")
-      .attr("value", "test")
-      .text("test!"));
-
-    self.$el.append($("<option></option>")
-      .attr("value", "test2")
-      .text("test2!"));
+    // Add sub components
+    self.renderSubComponent(".matcher-selector", self.options.MatcherSelectorView);
+    self.renderSubComponent(".matcher-value", self.options.ValueContainerView);
 
     return self;
+  },
+
+  /**
+   * @method renderSubcomponent
+   * @param className
+   * @param View
+   */
+  renderSubComponent: function(className, View) {
+    var self = this;
+    var $container = self.$el.find("> div" + className);
+    $container.empty();
+
+    // Add column selector
+    var subView = new View({
+      filter: self.filter
+    });
+    $container.append(subView.render().$el);
+  }
+});
+
+var ColumnFilter = Backbone.View.extend({
+  className: "columnfilter",
+  tagName: "div",
+  template: _.template("" +
+    "<div class=\"columnfilter-column\">" +
+    "<div class=\"columnfilter-matcher\">" +
+    ""
+  ),
+  events: {
+    "change": "columnUpdate"
+  },
+  defaults: {
+    ColumnSelectorView: ColumnSelectorView,
+    MatcherView: MatcherContainerView
+  },
+
+  initialize: function(options) {
+    var self = this;
+    self.options = _.extend({}, self.defaults, options || {});
+
+    // Input argument checking
+    if (!self.options.filter ||
+      !self.options.filter instanceof Backbone.Model) {
+      throw new Error("No (valid) filter state model provided");
+    }
+    self.filter = self.options.filter;
+  },
+
+  /**
+   * @method render
+   * @return {ColumnFilter}
+   */
+  render: function() {
+    var self = this;
+    self.$el.empty();
+
+    // Render template
+    self.$el.append(self.template());
+
+    // Add sub components
+    self.renderSubComponent(".columnfilter-column", self.options.ColumnSelectorView);
+    self.renderSubComponent(".columnfilter-matcher", self.options.MatcherView);
+
+    return self;
+  },
+
+  /**
+   * @method renderSubcomponent
+   * @param className
+   * @param View
+   */
+  renderSubComponent: function(className, View) {
+    var self = this;
+    var $container = self.$el.find("> div" + className);
+    $container.empty();
+
+    // Add column selector
+    var subView = new View({
+      filter: self.filter
+    });
+    $container.append(subView.render().$el);
   }
 });
 

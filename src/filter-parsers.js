@@ -65,46 +65,53 @@ MongoParser.prototype.getValidOnly = function(filter) {
 MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
   var result = {};
   switch(attributeFilter.matcher) {
-    case "eq":
-      result[attributeFilter.column] = {
-        "$eq": attributeFilter.value
-      };
-      break;
-    case "neq":
-      result[attributeFilter.column] = {
-        "$neq": attributeFilter.value
-      };
-      break;
+    // String only
     case "sw":
-      result[attributeFilter.column] = new RegExp("^" + attributeFilter.value);
+      // Starts with
+      result[attributeFilter.column] = {
+        "$regex": "^" + attributeFilter.value
+      };
       break;
     case "ew":
-      result[attributeFilter.column] = new RegExp(attributeFilter.value + "$");
+      // Ends with
+      result[attributeFilter.column] = {
+        "$regex": attributeFilter.value + "$"
+      };
       break;
     case "ct":
-      result[attributeFilter.column] = new RegExp(attributeFilter.value);
+      // Contains
+      result[attributeFilter.column] = {
+        "$regex": attributeFilter.value
+      };
       break;
+
+    // Numerical
     case "gt":
+      // Greater than
       result[attributeFilter.column] = {
         "$gt": attributeFilter.value
       };
       break;
     case "gte":
+      // Greater than or equal
       result[attributeFilter.column] = {
         "$gte": attributeFilter.value
       };
       break;
     case "lt":
+      // Lower than
       result[attributeFilter.column] = {
         "$lt": attributeFilter.value
       };
       break;
     case "lte":
+      // Lower than or equal
       result[attributeFilter.column] = {
         "$lte": attributeFilter.value
       };
       break;
     case "bt":
+      // Between (value1 <= x <= value2)
       var firstVal = {};
       var secondVal = {};
 
@@ -124,6 +131,7 @@ MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
       break;
 
     case "nbt":
+      // Outside (x < value1 OR x > value2)
       var firstValnbt = {};
       var secondValnbt = {};
 
@@ -141,7 +149,20 @@ MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
         ]
       };
       break;
-  }
 
+    // General
+    case "eq":
+      // Equals
+      result[attributeFilter.column] = {
+        "$eq": attributeFilter.value
+      };
+      break;
+    case "neq":
+      // Does not equal
+      result[attributeFilter.column] = {
+        "$neq": attributeFilter.value
+      };
+      break;
+  }
   return result;
 };

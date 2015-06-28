@@ -10,42 +10,67 @@ var _ = require("underscore");
 Backgrid.Extension.AdvancedFilter.FilterOptions = {};
 
 /**
+ * MatchersValueTypeValidator
+ * @property MatchersValueTypeValidator
+ */
+Backgrid.Extension.AdvancedFilter.FilterOptions.MatchersValueTypeValidator = {
+  single: function(value) {
+    return !_.isUndefined(value) && !_.isNull(value)
+      && !_.isArray(value) && !_.isFunction(value);
+  },
+  array2: function(value) {
+    return _.isArray(value) && value.length === 2;
+  }
+};
+
+/**
  * Matchers
  * @property Matchers
  */
 Backgrid.Extension.AdvancedFilter.FilterOptions.Matchers = {
   "gt": {
-    name: "greater than"
+    name: "greater than",
+    valueType: "single"
   },
   "gte": {
-    name: "greater than or equal"
+    name: "greater than or equal",
+    valueType: "single"
   },
   "lt": {
-    name: "lower than"
+    name: "lower than",
+    valueType: "single"
   },
   "lte": {
-    name: "lower than or equal"
+    name: "lower than or equal",
+    valueType: "single"
   },
   "eq": {
-    name: "equals"
+    name: "equals",
+    valueType: "single"
   },
   "neq": {
-    name: "does not equal"
+    name: "does not equal",
+    valueType: "single"
   },
   "sw": {
-    name: "starts with"
+    name: "starts with",
+    valueType: "single"
   },
   "ew": {
-    name: "ends with"
+    name: "ends with",
+    valueType: "single"
   },
   "ct": {
-    name: "contains"
+    name: "contains",
+    valueType: "single"
   },
   "bt": {
-    name: "between"
+    name: "between",
+    valueType: "array2"
   },
   "nbt": {
-    name: "outside"
+    name: "outside",
+    valueType: "array2"
   }
 };
 
@@ -58,10 +83,10 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     parser: function(value) {
       return value;
     },
-    validation: function(value) {
+    validator: function(value) {
       return _.isString(value);
     },
-    postProcess: function(value) {
+    postProcessor: function(value) {
       return value.trim();
     },
     matchers: ["sw", "ew", "eq", "neq", "ct"]
@@ -70,10 +95,10 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     parser: function(value) {
       return parseFloat(value);
     },
-    validation: function(value) {
+    validator: function(value) {
       return !isNaN(value);
     },
-    postProcess: function(value) {
+    postProcessor: function(value) {
       return value;
     },
     matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"]
@@ -82,10 +107,10 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     parser: function(value) {
       return parseFloat(value);
     },
-    validation: function(value) {
+    validator: function(value) {
       return !isNaN(value) && value >= 0 && value <= 100;
     },
-    postProcess: function(value) {
+    postProcessor: function(value) {
       return value / 100;
     },
     matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"]
@@ -94,10 +119,10 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     parser: function(value) {
       return !!value;
     },
-    validation: function(value) {
+    validator: function(value) {
       return _.isBoolean(value);
     },
-    postProcess: function(value) {
+    postProcessor: function(value) {
       return value;
     },
     matchers: ["eq", "neq"]

@@ -8,6 +8,42 @@ if (window.wallabyEnv) {
 var AdvancedFilter = Backgrid.Extension.AdvancedFilter;
 var FilterTypes = AdvancedFilter.FilterOptions.Types;
 var Matchers = AdvancedFilter.FilterOptions.Matchers;
+var MatchersValueTypeValidator = AdvancedFilter.FilterOptions.MatchersValueTypeValidator;
+
+describe("A Backgrid.AdvancedFilter Matcher value type validator", function () {
+  describe("of type Single", function () {
+    it("checks if input is a single value", function() {
+      var singleTypeValidator = MatchersValueTypeValidator.single;
+
+      expect(singleTypeValidator(1)).toBe(true);
+      expect(singleTypeValidator("string")).toBe(true);
+
+      expect(singleTypeValidator(null)).toBe(false);
+      expect(singleTypeValidator([])).toBe(false);
+      expect(singleTypeValidator([1, 1])).toBe(false);
+      expect(singleTypeValidator(["val1", "val2"])).toBe(false);
+      expect(singleTypeValidator(function() {})).toBe(false);
+    });
+  });
+
+  describe("of type Array2", function () {
+    it("checks if input is a non-empty array", function() {
+      var arrayTypeValidator = MatchersValueTypeValidator.array2;
+
+      expect(arrayTypeValidator([1, 1])).toBe(true);
+      expect(arrayTypeValidator(["val1", "val2"])).toBe(true);
+
+      expect(arrayTypeValidator([])).toBe(false);
+      expect(arrayTypeValidator([1])).toBe(false);
+      expect(arrayTypeValidator(["val1"])).toBe(false);
+      expect(arrayTypeValidator([1, 1, 1])).toBe(false);
+      expect(arrayTypeValidator(["val1", "val2", "val3"])).toBe(false);
+      expect(arrayTypeValidator(1)).toBe(false);
+      expect(arrayTypeValidator("string")).toBe(false);
+      expect(arrayTypeValidator(null)).toBe(false);
+    });
+  });
+});
 
 describe("A Backgrid.AdvancedFilter filter", function () {
   describe("of type Text", function () {
@@ -28,16 +64,16 @@ describe("A Backgrid.AdvancedFilter filter", function () {
     });
 
     it("has a validator for strings", function () {
-      expect(typeFilter.validation(123)).toBe(false);
-      expect(typeFilter.validation(parseInt("bla"))).toBe(false);
-      expect(typeFilter.validation({})).toBe(false);
-      expect(typeFilter.validation("A string")).toBe(true);
+      expect(typeFilter.validator(123)).toBe(false);
+      expect(typeFilter.validator(parseInt("bla"))).toBe(false);
+      expect(typeFilter.validator({})).toBe(false);
+      expect(typeFilter.validator("A string")).toBe(true);
     });
 
     it("has a post processor which trims the string", function () {
       var testValue = " A test string!";
       var testValuePost = "A test string!";
-      expect(typeFilter.postProcess(testValue)).toEqual(testValuePost);
+      expect(typeFilter.postProcessor(testValue)).toEqual(testValuePost);
     });
   });
 
@@ -63,18 +99,18 @@ describe("A Backgrid.AdvancedFilter filter", function () {
     });
 
     it("has a validator for numbers", function () {
-      expect(typeFilter.validation(123)).toBe(true);
-      expect(typeFilter.validation(0.001)).toBe(true);
-      expect(typeFilter.validation(1.0)).toBe(true);
-      expect(typeFilter.validation(parseInt("bla"))).toBe(false);
-      expect(typeFilter.validation({})).toBe(false);
-      expect(typeFilter.validation("A string")).toBe(false);
+      expect(typeFilter.validator(123)).toBe(true);
+      expect(typeFilter.validator(0.001)).toBe(true);
+      expect(typeFilter.validator(1.0)).toBe(true);
+      expect(typeFilter.validator(parseInt("bla"))).toBe(false);
+      expect(typeFilter.validator({})).toBe(false);
+      expect(typeFilter.validator("A string")).toBe(false);
     });
 
     it("has a post processor which returns the same value", function () {
       var testValue = 12.1;
       var testValuePost = 12.1;
-      expect(typeFilter.postProcess(testValue)).toEqual(testValuePost);
+      expect(typeFilter.postProcessor(testValue)).toEqual(testValuePost);
     });
   });
 
@@ -101,23 +137,23 @@ describe("A Backgrid.AdvancedFilter filter", function () {
 
     it("has a validator for percent values 0 <= x <= 100", function () {
       // Numerical values
-      expect(typeFilter.validation(0)).toBe(true);
-      expect(typeFilter.validation(100)).toBe(true);
-      expect(typeFilter.validation(50)).toBe(true);
-      expect(typeFilter.validation(-1)).toBe(false);
-      expect(typeFilter.validation(101)).toBe(false);
+      expect(typeFilter.validator(0)).toBe(true);
+      expect(typeFilter.validator(100)).toBe(true);
+      expect(typeFilter.validator(50)).toBe(true);
+      expect(typeFilter.validator(-1)).toBe(false);
+      expect(typeFilter.validator(101)).toBe(false);
 
       // Other values
-      expect(typeFilter.validation(parseInt("bla"))).toBe(false);
-      expect(typeFilter.validation({})).toBe(false);
-      expect(typeFilter.validation("A string")).toBe(false);
+      expect(typeFilter.validator(parseInt("bla"))).toBe(false);
+      expect(typeFilter.validator({})).toBe(false);
+      expect(typeFilter.validator("A string")).toBe(false);
     });
 
     it("has a post processor which divides the value by 100 to change the range to 0 <= x <= 1", function () {
-      expect(typeFilter.postProcess(100)).toEqual(1);
-      expect(typeFilter.postProcess(0)).toEqual(0);
-      expect(typeFilter.postProcess(50)).toEqual(0.5);
-      expect(typeFilter.postProcess(1)).toEqual(0.01);
+      expect(typeFilter.postProcessor(100)).toEqual(1);
+      expect(typeFilter.postProcessor(0)).toEqual(0);
+      expect(typeFilter.postProcessor(50)).toEqual(0.5);
+      expect(typeFilter.postProcessor(1)).toEqual(0.01);
     });
   });
 
@@ -143,18 +179,18 @@ describe("A Backgrid.AdvancedFilter filter", function () {
     });
 
     it("has a validator for boolean values", function () {
-      expect(typeFilter.validation(true)).toBe(true);
-      expect(typeFilter.validation(false)).toBe(true);
+      expect(typeFilter.validator(true)).toBe(true);
+      expect(typeFilter.validator(false)).toBe(true);
 
-      expect(typeFilter.validation(123)).toBe(false);
-      expect(typeFilter.validation(parseInt("bla"))).toBe(false);
-      expect(typeFilter.validation({})).toBe(false);
-      expect(typeFilter.validation("A string")).toBe(false);
+      expect(typeFilter.validator(123)).toBe(false);
+      expect(typeFilter.validator(parseInt("bla"))).toBe(false);
+      expect(typeFilter.validator({})).toBe(false);
+      expect(typeFilter.validator("A string")).toBe(false);
     });
 
     it("has a post processor which returns the same value", function () {
-      expect(typeFilter.postProcess(true)).toEqual(true);
-      expect(typeFilter.postProcess(false)).toEqual(false);
+      expect(typeFilter.postProcessor(true)).toEqual(true);
+      expect(typeFilter.postProcessor(false)).toEqual(false);
     });
   });
 });
