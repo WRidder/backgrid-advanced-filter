@@ -13,7 +13,11 @@ YUI.add("yuidoc-meta", function(Y) {
         "AdvancedFilter.Subcomponents.FilterDropdown",
         "AdvancedFilter.Subcomponents.FilterDropdownContainer",
         "AdvancedFilter.Subcomponents.FilterDropdownItemview",
+        "ColumnFilterView",
         "FilterStateModel",
+        "FilterView",
+        "MatcherContainerView",
+        "MatcherSelectorView",
         "MongoParser",
         "NewFilterButtonView",
         "RemoveFilterButtonView"

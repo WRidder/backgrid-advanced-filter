@@ -177,6 +177,10 @@ div.advancedfilter-saver > div.advancedfilter-saver-buttons {
     width: 50%;
 }
 
+div.advancedfilter-saver > div.advancedfilter-saver-buttons > button {
+    float: right;
+}
+
 /*
 Editor component
 */
@@ -188,18 +192,79 @@ div.advancedfilter-editor button.remove-attribute-filter {
     float: right;
 }
 
-div.advancedfilter-editor .filter-editor {
+/*
+Editor
+*/
+div.advancedfilter-editor > button.new-attribute-filter {
     margin: 2px 0;
 }
 
-div.advancedfilter-editor .filter-editor select {
-    height: 26px;
+div.advancedfilter-editor > .filter-editor {
+    margin: 2px 0;
+    margin-right: 50px;
+}
+
+div.advancedfilter-editor > .filter-editor .clearer{
+    clear: both;
+}
+
+div.advancedfilter-editor > .filter-editor.invalid {
+    background-color: #fff4f7;
+}
+
+div.advancedfilter-editor > .filter-editor.valid {
+    background-color: #f5ffef;
 }
 
 div.advancedfilter-editor .filter-editor select {
     height: 26px;
+    width: 90%;
+    max-width: 90%;
 }
 
-div.advancedfilter-editor .filter-editor button {
-    height: 26px;
+/*
+Editor - columnfilter
+*/
+div.advancedfilter-editor > .filter-editor > .filter-editor-columnfilter {
+    width: 100%;
+    float: left;
+}
+
+div.advancedfilter-editor > .filter-editor > .filter-editor-addremove {
+    width: 50px;
+    float: right;
+    margin-right: -50px;
+}
+
+/*
+Editor - .filter-editor-columnfilter
+*/
+div.advancedfilter-editor > .filter-editor .columnfilter-column {
+    float: left;
+    width: 33%;
+}
+
+div.advancedfilter-editor > .filter-editor .columnfilter-matcher {
+    float: right;
+    width: 66%;
+}
+
+div.advancedfilter-editor > .filter-editor .matcher-selector{
+    float: left;
+    width: 45%;
+}
+
+div.advancedfilter-editor > .filter-editor .matcher-value {
+    float: right;
+    width: 55%;
+}
+
+div.advancedfilter-editor input.single-value-text {
+    width: 98%;
+    margin: 0 1%;
+}
+
+div.advancedfilter-editor input.double-value-text {
+    width: 48%;
+    margin: 0 1%;
 }

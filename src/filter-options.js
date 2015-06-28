@@ -79,7 +79,7 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Matchers = {
  * @property Types
  */
 Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
-  "text": {
+  "string": {
     parser: function(value) {
       return value;
     },
@@ -89,7 +89,8 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     postProcessor: function(value) {
       return value.trim();
     },
-    matchers: ["sw", "ew", "eq", "neq", "ct"]
+    matchers: ["sw", "ew", "eq", "neq", "ct"],
+    inputType: "textbox"
   },
   "number": {
     parser: function(value) {
@@ -101,7 +102,21 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     postProcessor: function(value) {
       return value;
     },
-    matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"]
+    matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"],
+    inputType: "textbox"
+  },
+  "integer": {
+    parser: function(value) {
+      return parseInt(value);
+    },
+    validator: function(value) {
+      return !isNaN(value);
+    },
+    postProcessor: function(value) {
+      return value;
+    },
+    matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"],
+    inputType: "textbox"
   },
   "percent": {
     parser: function(value) {
@@ -113,7 +128,8 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     postProcessor: function(value) {
       return value / 100;
     },
-    matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"]
+    matchers: ["gt", "gte", "lt", "lte", "bt", "nbt", "eq", "neq"],
+    inputType: "textbox"
   },
   "boolean": {
     parser: function(value) {
@@ -125,6 +141,7 @@ Backgrid.Extension.AdvancedFilter.FilterOptions.Types = {
     postProcessor: function(value) {
       return value;
     },
-    matchers: ["eq", "neq"]
+    matchers: ["eq", "neq"],
+    inputType: "boolean-select"
   }
 };

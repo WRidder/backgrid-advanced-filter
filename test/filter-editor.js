@@ -29,7 +29,7 @@ describe("A Backgrid.AdvancedFilter Editor", function () {
 
       var filters = new AdvancedFilter.FilterCollection({
         name: "Test filter",
-        filters: new AdvancedFilter.AttributeFilterCollection()
+        attributeFilters: new AdvancedFilter.AttributeFilterCollection()
       });
 
       // Create state model
@@ -57,7 +57,7 @@ describe("A Backgrid.AdvancedFilter Editor", function () {
     });
 
     it("shows an 'add filter' button if attribute filter collection is empty", function() {
-      expect($(".advancedfilter-editor > div > button.new-attribute-filter").length).toBe(1);
+      expect($(".advancedfilter-editor > button.new-attribute-filter").length).toBe(1);
     });
 
     it("shows a filter when the 'add filter' button is clicked", function() {
@@ -65,7 +65,7 @@ describe("A Backgrid.AdvancedFilter Editor", function () {
       $("button.new-attribute-filter").first().click();
 
       // Add filter button should be gone now
-      expect($(".advancedfilter-editor > div > button.new-attribute-filter").length).toBe(0);
+      expect($(".advancedfilter-editor > button.new-attribute-filter").length).toBe(0);
     });
 
     it("re-renders the editor once if a new attribute filter is added", function() {
@@ -82,6 +82,48 @@ describe("A Backgrid.AdvancedFilter Editor", function () {
 
       expect(ed.render).toHaveBeenCalled();
       expect(ed.render.calls.count()).toEqual(5);
+    });
+
+    it("adds a 'valid' class to an attribute filter if it's valid", function() {
+      var fsm = ed.filterStateModel;
+      var filterId = fsm.get("activeFilterId");
+      var activeFilter = fsm.get("filterCollection").get(filterId);
+
+      ed.render.calls.reset();
+      activeFilter.get("attributeFilters").createNewAttributeFilter();
+      activeFilter.get("attributeFilters").first().set({
+        "columnName": "cname",
+        "type": "string",
+        "matcher": "eq",
+        "value": "someValue"
+      });
+
+      expect(ed.render).toHaveBeenCalled();
+      expect(ed.render.calls.count()).toEqual(1);
+
+      ed.render.calls.reset();
+      activeFilter.get("attributeFilters").createNewAttributeFilter();
+      activeFilter.get("attributeFilters").first().set({
+        "columnName": "cname",
+        "type": "integer",
+        "matcher": "bt",
+        "value": [10, 12]
+      });
+
+      expect(ed.render).toHaveBeenCalled();
+      expect(ed.render.calls.count()).toEqual(1);
+
+      ed.render.calls.reset();
+      activeFilter.get("attributeFilters").createNewAttributeFilter();
+      activeFilter.get("attributeFilters").first().set({
+        "columnName": "cname",
+        "type": "boolean",
+        "matcher": "eq",
+        "value": true
+      });
+
+      expect(ed.render).toHaveBeenCalled();
+      expect(ed.render.calls.count()).toEqual(1);
     });
   });
 });

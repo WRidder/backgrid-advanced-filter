@@ -95,14 +95,14 @@ describe("A Backgrid.AdvancedFilter Main", function () {
           attributeFilters: [
             {
               column: "testcol",
-              type: "text",
-              matcher: "equals",
+              type: "string",
+              matcher: "eq",
               value: "someValue"
             },
             {
               column: "testcol1",
-              type: "text",
-              matcher: "startsWith",
+              type: "string",
+              matcher: "eq",
               value: "thisValue"
             }
           ]
@@ -111,16 +111,49 @@ describe("A Backgrid.AdvancedFilter Main", function () {
           name: "Test filter",
           attributeFilters: {
             column: "testcol",
-            type: "text",
-            matcher: "equals",
+            type: "string",
+            matcher: "eq",
             value: "someValue"
           }
         }
       ]);
 
+      var columns = new Backgrid.Columns([
+        {
+          name: "nameCol",
+          label: "Name",
+          cell: "string",
+          filterType: "string"
+        },
+        {
+          name: "numberCol",
+          label: "Number",
+          cell: "number",
+          filterType: "number"
+        },
+        {
+          name: "intCol",
+          label: "Integer",
+          cell: "integer",
+          filterType: "integer"
+        },
+        {
+          name: "pctCol",
+          label: "Percent",
+          cell: "percent",
+          filterType: "percent"
+        },
+        {
+          name: "boolCol",
+          label: "Boolean",
+          cell: "boolean",
+          filterType: "boolean"
+        }
+      ]);
+
       main = new AdvancedFilter.Main({
         collection: new Backbone.Collection(),
-        columns: new Backgrid.Columns(),
+        columns: columns,
         filters: filters,
         activeFilterId: filters.first().cid
       }).render();
@@ -249,7 +282,6 @@ describe("A Backgrid.AdvancedFilter Main", function () {
       );
 
       filter.get("attributeFilters").reset([]);
-      console.log(filter)
 
       main.filterStateModel.trigger("filter:cancel");
       var currentState1 = {

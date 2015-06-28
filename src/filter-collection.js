@@ -21,7 +21,7 @@ var attributeFilterModel = Backgrid.Extension.AdvancedFilter.AttributeFilterMode
   defaults: {
     column: null,
     type: null,
-    matcher: null,
+    matcher: "eq",
     value: null,
     valid: false
   },
@@ -30,10 +30,16 @@ var attributeFilterModel = Backgrid.Extension.AdvancedFilter.AttributeFilterMode
     var self = this;
 
     // Events
-    self.listenTo(self, "change:column change:type change:matcher change:value", self.checkValidity);
+    self.listenTo(self, "change:column change:type change:matcher change:value", self.setValidity);
+    self.listenTo(self, "change:column", self.columnChange);
+    self.listenTo(self, "change:matcher", self.matcherChange);
   },
 
-  checkValidity: function() {
+  /**
+   * @method validator
+   * @return {boolean}
+   */
+  validator: function() {
     var self = this;
     var valid = false;
 
@@ -44,17 +50,55 @@ var attributeFilterModel = Backgrid.Extension.AdvancedFilter.AttributeFilterMode
     if (_.has(FilterTypes, type)) {
 
       // Check if matcher belongs to type
-      if (!_.contains(FilterTypes[type].matchers)) {
+      if (_.contains(FilterTypes[type].matchers, matcher)) {
 
         // Check if the type of value is valid for current matcher
         var matcherValueType = Matchers[matcher].valueType;
         if (MatchersValueTypeValidator[matcherValueType](value)) {
           // Validate the value
-          valid = FilterTypes[type].validator(value);
+          if (_.isArray(value)) {
+            var allValid = true;
+            _.each(value, function(val) {
+              allValid = allValid && FilterTypes[type].validator(val);
+            });
+            valid = allValid;
+          }
+          else {
+            valid = FilterTypes[type].validator(value);
+          }
         }
       }
     }
-    self.set("valid", valid);
+    return valid;
+  },
+
+  /**
+   * @method setValidity
+   */
+  setValidity: function() {
+    var self = this;
+
+    self.set("valid", self.validator());
+  },
+
+  /**
+   * @method columnChange
+   */
+  columnChange: function() {
+    var self = this;
+    if(!self.validator()) {
+      self.set("matcher", null);
+    }
+  },
+
+  /**
+   * @method matcherChange
+   */
+  matcherChange: function() {
+    var self = this;
+    if(!self.validator()) {
+      self.set("value", null);
+    }
   }
 });
 

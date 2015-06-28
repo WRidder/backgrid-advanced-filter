@@ -65,7 +65,15 @@
             
                 <li><a href="../classes/AdvancedFilter.SubComponents.LabelView.html">AdvancedFilter.SubComponents.LabelView</a></li>
             
+                <li><a href="../classes/ColumnFilterView.html">ColumnFilterView</a></li>
+            
                 <li><a href="../classes/FilterStateModel.html">FilterStateModel</a></li>
+            
+                <li><a href="../classes/FilterView.html">FilterView</a></li>
+            
+                <li><a href="../classes/MatcherContainerView.html">MatcherContainerView</a></li>
+            
+                <li><a href="../classes/MatcherSelectorView.html">MatcherSelectorView</a></li>
             
                 <li><a href="../classes/MongoParser.html">MongoParser</a></li>
             
@@ -141,8 +149,11 @@
  *
  * @module AdvancedFilter.FilterStateModel
  */
+var _ = require(&quot;underscore&quot;);
 var Backbone = require(&quot;backbone&quot;);
 var Backgrid = require(&quot;backgrid&quot;);
+var FilterTypes = Backgrid.Extension.AdvancedFilter.FilterOptions.Types;
+var FilterMatchers = Backgrid.Extension.AdvancedFilter.FilterOptions.Matchers;
 
 /**
  *
@@ -167,6 +178,10 @@ Backgrid.Extension.AdvancedFilter.FilterStateModel = Backbone.Model.extend({
     return self.get(&quot;filterCollection&quot;).get(filterId);
   },
 
+  /**
+   * @method setActiveFilter
+   * @param filterToActivate
+   */
   setActiveFilter: function(filterToActivate) {
     var self = this;
 
@@ -184,6 +199,73 @@ Backgrid.Extension.AdvancedFilter.FilterStateModel = Backbone.Model.extend({
     if (self.get(&quot;filterCollection&quot;).get(filterId)) {
       self.set(&quot;activeFilterId&quot;, filterId);
     }
+  },
+
+  /**
+   * @method getFilterableColumns
+   */
+  getFilterableColumns: function() {
+    var self = this;
+    var columns = self.get(&quot;columnCollection&quot;);
+    if (!columns) {
+      return {};
+    }
+
+    var filterAbleColumns = columns.filter(function(col) {
+      return _.has(FilterTypes, col.get(&quot;filterType&quot;));
+    });
+
+    var result = {};
+    _.each(filterAbleColumns, function(col) {
+      result[col.get(&quot;name&quot;)] = {
+        label: col.get(&quot;label&quot;),
+        filterType: col.get(&quot;filterType&quot;)
+      };
+    });
+
+    return result;
+  },
+
+  /**
+   * @method getMatchers
+   * @param {String} type
+   */
+  getMatchers: function(type) {
+    var filterType = FilterTypes[type];
+
+    if (!filterType) {
+      return {};
+    }
+
+    var result = {};
+    _.each(filterType.matchers, function(matcher) {
+      result[matcher] = {
+        label: FilterMatchers[matcher].name
+      };
+    });
+
+    return result;
+  },
+
+  /**
+   * @method getInputTypeInfoForMatcher
+   * @param matcher
+   * @return {string}
+   */
+  getInputTypeInfoForMatcher: function(matcher, filterType) {
+    return {
+      valueType: FilterMatchers[matcher].valueType,
+      inputType: FilterTypes[filterType].inputType
+    };
+  },
+
+  /**
+   * @method getValueParser
+   * @param filterType
+   * @return {Function}
+   */
+  getValueParser: function(filterType) {
+    return FilterTypes[filterType].parser;
   }
 });
 

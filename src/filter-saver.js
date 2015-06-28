@@ -22,10 +22,10 @@ Backgrid.Extension.AdvancedFilter.Saver = Backbone.View.extend({
       "<input type=\"text\" value=\"<%-inputValue%>\">" +
     "</div>" +
     "<div class=\"advancedfilter-saver-buttons\">" +
-      "<button class=\"save\"><%-saveText%></button>" +
-      "<button class=\"cancel\"><%-cancelText%></button>" +
-      "<button class=\"reset\"><%-resetText%></button>" +
       "<button class=\"remove\"><%-removeText%></button>" +
+      "<button class=\"reset\"><%-resetText%></button>" +
+      "<button class=\"cancel\"><%-cancelText%></button>" +
+      "<button class=\"save\"><%-saveText%></button>" +
     "</div>"
   ),
   events: {

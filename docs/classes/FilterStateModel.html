@@ -65,7 +65,15 @@
             
                 <li><a href="../classes/AdvancedFilter.SubComponents.LabelView.html">AdvancedFilter.SubComponents.LabelView</a></li>
             
+                <li><a href="../classes/ColumnFilterView.html">ColumnFilterView</a></li>
+            
                 <li><a href="../classes/FilterStateModel.html">FilterStateModel</a></li>
+            
+                <li><a href="../classes/FilterView.html">FilterView</a></li>
+            
+                <li><a href="../classes/MatcherContainerView.html">MatcherContainerView</a></li>
+            
+                <li><a href="../classes/MatcherSelectorView.html">MatcherSelectorView</a></li>
             
                 <li><a href="../classes/MongoParser.html">MongoParser</a></li>
             
@@ -142,7 +150,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l11"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:11</code></a>
+            Defined in: <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l14"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:14</code></a>
         </div>
     
 
@@ -187,6 +195,41 @@
                         
                             <li class="index-item method">
                                 <a href="#method_getActiveFilter">getActiveFilter</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getFilterableColumns">getFilterableColumns</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getInputTypeInfoForMatcher">getInputTypeInfoForMatcher</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getMatchers">getMatchers</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getValueParser">getValueParser</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setActiveFilter">setActiveFilter</a>
 
                                 
                                 
@@ -244,7 +287,7 @@
             
         
         
-        <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l24"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:24</code></a>
+        <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l27"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:27</code></a>
         
         </p>
 
@@ -272,6 +315,440 @@
                 
             </div>
         </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getFilterableColumns" class="method item">
+    <h3 class="name"><code>getFilterableColumns</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l60"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:60</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getInputTypeInfoForMatcher" class="method item">
+    <h3 class="name"><code>getInputTypeInfoForMatcher</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matcher</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l106"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:106</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matcher</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getMatchers" class="method item">
+    <h3 class="name"><code>getMatchers</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l85"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:85</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getValueParser" class="method item">
+    <h3 class="name"><code>getValueParser</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>filterType</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l118"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:118</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">filterType</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_setActiveFilter" class="method item">
+    <h3 class="name"><code>setActiveFilter</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>filterToActivate</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_wilbert_github_backgrid-advanced-filter_src_filter-model.js.html#l37"><code>&#x2F;home&#x2F;wilbert&#x2F;github&#x2F;backgrid-advanced-filter&#x2F;src&#x2F;filter-model.js:37</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">filterToActivate</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
     
 
     

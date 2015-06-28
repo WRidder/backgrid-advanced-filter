@@ -35,7 +35,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("name", "Test filter 1");
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
-      type: "text",
+      type: "string",
       matcher: "ct",
       value: "anything"
     }));
@@ -49,7 +49,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("name", "Test filter 1");
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
-      type: "text",
+      type: "string",
       matcher: "ct",
       value: "anything"
     }));
@@ -61,7 +61,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       name: "Test filter 1",
       attributeFilters: [{
         column: "firstColumn",
-        type: "text",
+        type: "string",
         matcher: "ct",
         value: "anything",
         valid: false
@@ -73,7 +73,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("name", "Test filter 1");
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
-      type: "text",
+      type: "string",
       matcher: "ct",
       value: "anything",
       valid: true
@@ -86,7 +86,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       name: "Test filter 1",
       attributeFilters: [{
         column: "firstColumn",
-        type: "text",
+        type: "string",
         matcher: "ct",
         value: "anything",
         valid: true
@@ -104,7 +104,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       name: "Another name",
       attributeFilters: [{
         column: "secondColumn",
-        type: "text",
+        type: "string",
         matcher: "ct",
         value: "anything",
         valid: true
@@ -122,7 +122,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       name: "Test filter 1",
       attributeFilters: [{
         column: "firstColumn",
-        type: "text",
+        type: "string",
         matcher: "ct",
         value: "anything",
         valid: true
@@ -134,7 +134,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("name", "Test filter 1");
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
-      type: "text",
+      type: "string",
       matcher: "ct",
       value: "anything"
     }));
@@ -149,7 +149,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("name", "Test filter 1");
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
-      type: "text",
+      type: "string",
       matcher: "sw",
       value: "anything",
       valid: true
@@ -174,7 +174,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     fm.set("name", "Test filter 2");
     fm.set("attributeFilters", new AdvancedFilter.AttributeFilterCollection({
       column: "firstColumn",
-      type: "text",
+      type: "string",
       matcher: "sw",
       value: "anything",
       valid: true
@@ -254,13 +254,13 @@ describe("A Backgrid.AdvancedFilter Filter collection", function () {
     lastFilter.get("attributeFilters").add([
       {
         column: "testcol",
-        type: "text",
+        type: "string",
         matcher: "eq",
         value: "test"
       },
       {
         column: "testcol",
-        type: "text",
+        type: "string",
         matcher: "eq",
         value: "test"
       }

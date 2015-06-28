@@ -46,8 +46,8 @@ describe("A Backgrid.AdvancedFilter Matcher value type validator", function () {
 });
 
 describe("A Backgrid.AdvancedFilter filter", function () {
-  describe("of type Text", function () {
-    var typeFilter = FilterTypes.text;
+  describe("of type String", function () {
+    var typeFilter = FilterTypes.string;
     var typeMatchers = typeFilter.matchers.sort();
 
     it("has matchers which are defined in the Matchers list", function () {
@@ -102,6 +102,42 @@ describe("A Backgrid.AdvancedFilter filter", function () {
       expect(typeFilter.validator(123)).toBe(true);
       expect(typeFilter.validator(0.001)).toBe(true);
       expect(typeFilter.validator(1.0)).toBe(true);
+      expect(typeFilter.validator(parseInt("bla"))).toBe(false);
+      expect(typeFilter.validator({})).toBe(false);
+      expect(typeFilter.validator("A string")).toBe(false);
+    });
+
+    it("has a post processor which returns the same value", function () {
+      var testValue = 12.1;
+      var testValuePost = 12.1;
+      expect(typeFilter.postProcessor(testValue)).toEqual(testValuePost);
+    });
+  });
+
+  describe("of type Integer", function () {
+    var typeFilter = FilterTypes.integer;
+    var typeMatchers = typeFilter.matchers.sort();
+
+    it("has matchers which are defined in the Matchers list", function () {
+      expect(_.intersection(typeMatchers, _.keys(Matchers)).length).toEqual(typeMatchers.length);
+    });
+
+    it("supports 'greater than', 'greater than or equals', 'lower than', " +
+      "'lower than or equals', 'between', 'equals' and 'does not equal'", function(){
+      expect(typeMatchers).toEqual(["bt", "eq", "gt", "gte", "lt", "lte", "nbt", "neq"]);
+    });
+
+    it("has a parser which parses the value as a float", function () {
+      expect(typeFilter.parser(1)).toEqual(1);
+      expect(typeFilter.parser(0)).toEqual(0);
+      expect(typeFilter.parser(11.58)).toEqual(11);
+      expect(typeFilter.parser("0.1")).toEqual(0);
+      expect(typeFilter.parser("999")).toEqual(999);
+      expect(typeFilter.parser("bla")).toEqual(NaN);
+    });
+
+    it("has a validator for integers", function () {
+      expect(typeFilter.validator(123)).toBe(true);
       expect(typeFilter.validator(parseInt("bla"))).toBe(false);
       expect(typeFilter.validator({})).toBe(false);
       expect(typeFilter.validator("A string")).toBe(false);

@@ -65,7 +65,15 @@
             
                 <li><a href="../classes/AdvancedFilter.SubComponents.LabelView.html">AdvancedFilter.SubComponents.LabelView</a></li>
             
+                <li><a href="../classes/ColumnFilterView.html">ColumnFilterView</a></li>
+            
                 <li><a href="../classes/FilterStateModel.html">FilterStateModel</a></li>
+            
+                <li><a href="../classes/FilterView.html">FilterView</a></li>
+            
+                <li><a href="../classes/MatcherContainerView.html">MatcherContainerView</a></li>
+            
+                <li><a href="../classes/MatcherSelectorView.html">MatcherSelectorView</a></li>
             
                 <li><a href="../classes/MongoParser.html">MongoParser</a></li>
             
@@ -157,7 +165,7 @@ var attributeFilterModel = Backgrid.Extension.AdvancedFilter.AttributeFilterMode
   defaults: {
     column: null,
     type: null,
-    matcher: null,
+    matcher: &quot;eq&quot;,
     value: null,
     valid: false
   },
@@ -166,10 +174,16 @@ var attributeFilterModel = Backgrid.Extension.AdvancedFilter.AttributeFilterMode
     var self = this;
 
     // Events
-    self.listenTo(self, &quot;change:column change:type change:matcher change:value&quot;, self.checkValidity);
+    self.listenTo(self, &quot;change:column change:type change:matcher change:value&quot;, self.setValidity);
+    self.listenTo(self, &quot;change:column&quot;, self.columnChange);
+    self.listenTo(self, &quot;change:matcher&quot;, self.matcherChange);
   },
 
-  checkValidity: function() {
+  /**
+   * @method validator
+   * @return {boolean}
+   */
+  validator: function() {
     var self = this;
     var valid = false;
 
@@ -180,17 +194,55 @@ var attributeFilterModel = Backgrid.Extension.AdvancedFilter.AttributeFilterMode
     if (_.has(FilterTypes, type)) {
 
       // Check if matcher belongs to type
-      if (!_.contains(FilterTypes[type].matchers)) {
+      if (_.contains(FilterTypes[type].matchers, matcher)) {
 
         // Check if the type of value is valid for current matcher
         var matcherValueType = Matchers[matcher].valueType;
         if (MatchersValueTypeValidator[matcherValueType](value)) {
           // Validate the value
-          valid = FilterTypes[type].validator(value);
+          if (_.isArray(value)) {
+            var allValid = true;
+            _.each(value, function(val) {
+              allValid = allValid &amp;&amp; FilterTypes[type].validator(val);
+            });
+            valid = allValid;
+          }
+          else {
+            valid = FilterTypes[type].validator(value);
+          }
         }
       }
     }
-    self.set(&quot;valid&quot;, valid);
+    return valid;
+  },
+
+  /**
+   * @method setValidity
+   */
+  setValidity: function() {
+    var self = this;
+
+    self.set(&quot;valid&quot;, self.validator());
+  },
+
+  /**
+   * @method columnChange
+   */
+  columnChange: function() {
+    var self = this;
+    if(!self.validator()) {
+      self.set(&quot;matcher&quot;, null);
+    }
+  },
+
+  /**
+   * @method matcherChange
+   */
+  matcherChange: function() {
+    var self = this;
+    if(!self.validator()) {
+      self.set(&quot;value&quot;, null);
+    }
   }
 });
 
