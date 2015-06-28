@@ -1,4 +1,4 @@
-# backgrid-advanced-filter
+# Backgrid advanced filter
 An advanced filter plugin for Backgrid.
 [Online demo (will be added soon)](https://wridder.github.io/backgrid-demo/)
 
@@ -61,7 +61,6 @@ An advanced filter plugin for Backgrid.
 - Filter editor
   - Finalize filters for boolean, number, string and percent columns
   - Validation / error handling
-- Export to mongo filter style JSON
 - API reference example
 
 ## Dependencies
@@ -77,4 +76,4 @@ An advanced filter plugin for Backgrid.
 - Commit to your fork and create a PR (Pull request) with the changes
 
 ## Authors
-This project is originally developed by [Wilbert van de Ridder](https://github.com/WRidder/) and sponsored by [Solodev](http://www.solodev.com).
+This project is developed and maintained by [Wilbert van de Ridder](https://github.com/WRidder/) and sponsored by [Solodev](http://www.solodev.com).
