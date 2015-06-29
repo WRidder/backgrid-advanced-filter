@@ -166,3 +166,175 @@ MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
   }
   return result;
 };
+
+/**
+ * @class MongoParser
+ * @constructor
+ */
+var SimpleParser = Backgrid.Extension.AdvancedFilter.FilterParsers.SimpleParser = function() {};
+
+/**
+ * @method parse
+ * @return {Object}
+ */
+SimpleParser.prototype.parse = function(filter) {
+  var self = this;
+
+  // Input argument checking
+  if (!filter ||
+    !filter instanceof Backgrid.Extension.AdvancedFilter.FilterModel) {
+    throw new Error("SimpleParser: No (valid) filter collection provided");
+  }
+
+  // Get array of valid filters
+  var validAttributeFilters = self.getValidOnly(filter);
+
+  // Parse filters
+  var result = [];
+  _.each(validAttributeFilters, function(attrFilter) {
+    result.push(self.parseAttributeFilter(attrFilter.toJSON()));
+  });
+
+  return result;
+};
+
+/**
+ * @method getValidOnly
+ * @param {Backgrid.Extension.AdvancedFilter.FilterModel} filter
+ * @return {Array} valid attribute filter models
+ * @private
+ */
+SimpleParser.prototype.getValidOnly = function(filter) {
+  // Get attribute filters
+  var attributeFilters = filter.get("attributeFilters");
+
+  // Return array of valid filters
+  return attributeFilters.where({valid: true});
+};
+
+/**
+ * @method parseAttributeFilter
+ * @param {Object} attributeFilter
+ * @return {Object} mongo style filter
+ * @private
+ */
+SimpleParser.prototype.parseAttributeFilter = function(attributeFilter) {
+  var result = {};
+  switch(attributeFilter.matcher) {
+    // String only
+    case "sw":
+      // Starts with
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "regex",
+          value: "^" + attributeFilter.value
+        }
+      };
+      break;
+    case "ew":
+      // Ends with
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "regex",
+          value: attributeFilter.value + "$"
+        }
+      };
+      break;
+    case "ct":
+      // Contains
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "regex",
+          value: attributeFilter.value
+        }
+      };
+      break;
+
+    // Numerical
+    case "gt":
+      // Greater than
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "gt",
+          value: attributeFilter.value
+        }
+      };
+      break;
+    case "gte":
+      // Greater than or equal
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "gte",
+          value: attributeFilter.value
+        }
+      };
+      break;
+    case "lt":
+      // Lower than
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "lt",
+          value: attributeFilter.value
+        }
+      };
+      break;
+    case "lte":
+      // Lower than or equal
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "lte",
+          value: attributeFilter.value
+        }
+      };
+      break;
+    case "bt":
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "bt",
+          value: attributeFilter.value
+        }
+      };
+      break;
+    case "nbt":
+      // Outside (x < value1 OR x > value2)
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "nbt",
+          value: attributeFilter.value
+        }
+      };
+      break;
+
+    // General
+    case "eq":
+      // Equals
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "eq",
+          value: attributeFilter.value
+        }
+      };
+      break;
+    case "neq":
+      // Does not equal
+      result = {
+        "column": attributeFilter.column,
+        "matcher": {
+          type: "neq",
+          value: attributeFilter.value
+        }
+      };
+      break;
+  }
+  return result;
+};
