@@ -629,6 +629,9 @@ var ColumnFilterView = Backbone.View.extend({
     var self = this;
     self.options = _.extend({}, self.defaults, options || {});
 
+    // Childviews containers
+    self.childViews = {};
+
     // Input argument checking
     if (!self.options.filterStateModel ||
       !self.options.filterStateModel instanceof Backbone.Model) {
@@ -693,6 +696,25 @@ var ColumnFilterView = Backbone.View.extend({
       filterStateModel: self.filterStateModel
     });
     $container.append(subView.render().$el);
+
+    // Register childviews
+    self.childViews[className] = subView;
+  },
+
+  /**
+   * @method remove
+   * @return {*}
+   */
+  remove: function() {
+    var self = this;
+
+    // Remove childviews
+    _.each(self.childViews, function(view) {
+      view.remove();
+    });
+
+    // Invoke original backbone methods
+    return Backbone.View.prototype.remove.apply(self, arguments);
   }
 });
 
@@ -751,20 +773,20 @@ Backgrid.Extension.AdvancedFilter.SubComponents.FilterView = Backbone.View.exten
     self.$el.append(self.template());
 
     // Add column selector
-    var columnFilterView = new this.options.ColumnFilterView({
+    var columnFilterView = self.columnFilterView = new this.options.ColumnFilterView({
       filterStateModel: self.filterStateModel,
       filter: self.filter
     });
     self.$el.find(".filter-editor-columnfilter").append(columnFilterView.render().$el);
 
     // Add attribute filter view
-    var addAttributeFilterView = new this.options.NewFilterButtonView({
+    var addAttributeFilterView = self.addAttributeFilterView = new this.options.NewFilterButtonView({
       filterStateModel: self.filterStateModel,
       filter: self.filter
     });
     self.$el.find(".filter-editor-addremove").append(addAttributeFilterView.render().$el);
 
-    var removeAttributeFilterView = new this.options.RemoveFilterButtonView({
+    var removeAttributeFilterView = self.removeAttributeFilterView = new this.options.RemoveFilterButtonView({
       filterStateModel: self.filterStateModel,
       filter: self.filter
     });
@@ -791,6 +813,22 @@ Backgrid.Extension.AdvancedFilter.SubComponents.FilterView = Backbone.View.exten
       self.$el.removeClass("valid");
       self.$el.addClass("invalid");
     }
+  },
+
+  /**
+   * @method remove
+   * @return {*}
+   */
+  remove: function() {
+    var self = this;
+
+    // Remove childview
+    self.columnFilterView.remove();
+    self.addAttributeFilterView.remove();
+    self.removeAttributeFilterView.remove();
+
+    // Invoke original backbone methods
+    return Backbone.View.prototype.remove.apply(self, arguments);
   }
 });
 
@@ -865,7 +903,7 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
       // Loop filters
       if (af.get("attributeFilters").length > 0) {
         af.get("attributeFilters").each(function(attributeFilter) {
-          var filterView = new Backgrid.Extension.AdvancedFilter.SubComponents.FilterView({
+          var filterView = self.childView = new Backgrid.Extension.AdvancedFilter.SubComponents.FilterView({
             filterStateModel: self.filterStateModel,
             attributeFilter: attributeFilter
           });
@@ -884,5 +922,21 @@ Backgrid.Extension.AdvancedFilter.Editor = Backbone.View.extend({
     }
 
     return self;
+  },
+
+  /**
+   * @method remove
+   * @return {*}
+   */
+  remove: function() {
+    var self = this;
+
+    // Remove childview
+    if (self.childView) {
+      self.childView.remove();
+    }
+
+    // Invoke original backbone methods
+    return Backbone.View.prototype.remove.apply(self, arguments);
   }
 });

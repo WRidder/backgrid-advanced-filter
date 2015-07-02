@@ -170,6 +170,7 @@ Backgrid.Extension.AdvancedFilter.Saver = Backbone.View.extend({
       &quot;&lt;button class=\&quot;reset\&quot;&gt;&lt;%-resetText%&gt;&lt;/button&gt;&quot; +
       &quot;&lt;button class=\&quot;cancel\&quot;&gt;&lt;%-cancelText%&gt;&lt;/button&gt;&quot; +
       &quot;&lt;button class=\&quot;save\&quot;&gt;&lt;%-saveText%&gt;&lt;/button&gt;&quot; +
+      &quot;&lt;button class=\&quot;apply\&quot;&gt;&lt;%-applyText%&gt;&lt;/button&gt;&quot; +
     &quot;&lt;/div&gt;&quot; +
     &quot;&lt;div class=\&quot;clearer\&quot;&gt;&lt;/div&gt;&quot;
   ),
@@ -177,6 +178,7 @@ Backgrid.Extension.AdvancedFilter.Saver = Backbone.View.extend({
     &quot;click button.reset&quot;: &quot;resetFilter&quot;,
     &quot;click button.cancel&quot;: &quot;cancelFilter&quot;,
     &quot;click button.save&quot;: &quot;saveFilter&quot;,
+    &quot;click button.apply&quot;: &quot;applyFilter&quot;,
     &quot;click button.remove&quot;: &quot;removeFilter&quot;
   },
 
@@ -184,6 +186,7 @@ Backgrid.Extension.AdvancedFilter.Saver = Backbone.View.extend({
     resetText: &quot;Reset&quot;,
     cancelText: &quot;Cancel&quot;,
     saveText: &quot;Save&quot;,
+    applyText: &quot;Apply&quot;,
     removeText: &quot;Remove&quot;
   },
 
@@ -224,6 +227,7 @@ Backgrid.Extension.AdvancedFilter.Saver = Backbone.View.extend({
         resetText: self.options.resetText,
         cancelText: self.options.cancelText,
         saveText: self.options.saveText,
+        applyText: self.options.applyText,
         removeText: self.options.removeText
       }));
     }
@@ -254,6 +258,16 @@ Backgrid.Extension.AdvancedFilter.Saver = Backbone.View.extend({
       self.$el.find(&quot;input&quot;).val(filter.get(&quot;name&quot;));
     }
 
+    self.filterStateModel.trigger(&quot;filter:save&quot;);
+  },
+
+  /**
+   * @method applyFilter
+   * @param {Event} e
+   */
+  applyFilter: function(e) {
+    var self = this;
+    self.saveFilter(e);
     self.filterStateModel.trigger(&quot;filter:save&quot;);
   },
 

@@ -48,10 +48,10 @@ describe("A Backgrid.AdvancedFilter Save component", function () {
       sc = null;
     });
 
-    it("creates a container with an input and three buttons", function () {
+    it("creates a container with an input and five buttons", function () {
       expect($(".advancedfilter-saver-input").length).toBe(1);
       expect($(".advancedfilter-saver-buttons").length).toBe(1);
-      expect($(".advancedfilter-saver-buttons > button").length).toBe(4);
+      expect($(".advancedfilter-saver-buttons > button").length).toBe(5);
     });
 
     it("hides when no active filter is present", function () {
