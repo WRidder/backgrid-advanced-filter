@@ -121,6 +121,7 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
     var fsm = self.filterStateModel;
     self.listenTo(fsm, "filter:new", self.evtNewFilter);
     self.listenTo(fsm, "filter:save", self.evtSaveFilter);
+    self.listenTo(fsm, "filter:apply", self.evtApplyFilter);
     //self.listenTo(fsm, "filter:change", self.evtChangeFilter);
     self.listenTo(fsm, "filter:reset", self.evtResetFilter);
     self.listenTo(fsm, "filter:cancel", self.evtCancelFilter);
@@ -152,6 +153,19 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
     if (filter) {
       filter.saveFilter();
       self.trigger("filter:save", filter.cid, filter);
+    }
+  },
+
+  /**
+   * Event handler for filter:apply (fsm)
+   * @method evtApplyFilter
+   */
+  evtApplyFilter: function() {
+    var self = this;
+    var fsm = self.filterStateModel;
+    var filter = fsm.getActiveFilter();
+    if (filter) {
+      self.trigger("filter:apply", filter.cid, filter);
     }
   },
 

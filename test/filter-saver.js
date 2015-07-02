@@ -35,6 +35,7 @@ describe("A Backgrid.AdvancedFilter Save component", function () {
       spyOn(Saver.prototype, "saveFilter").and.callThrough();
       spyOn(Saver.prototype, "cancelFilter").and.callThrough();
       spyOn(Saver.prototype, "removeFilter").and.callThrough();
+      spyOn(Saver.prototype, "applyFilter").and.callThrough();
 
       // Create selector
       sc = new Saver({
@@ -48,10 +49,10 @@ describe("A Backgrid.AdvancedFilter Save component", function () {
       sc = null;
     });
 
-    it("creates a container with an input and three buttons", function () {
+    it("creates a container with an input and five buttons", function () {
       expect($(".advancedfilter-saver-input").length).toBe(1);
       expect($(".advancedfilter-saver-buttons").length).toBe(1);
-      expect($(".advancedfilter-saver-buttons > button").length).toBe(4);
+      expect($(".advancedfilter-saver-buttons > button").length).toBe(5);
     });
 
     it("hides when no active filter is present", function () {
@@ -68,15 +69,18 @@ describe("A Backgrid.AdvancedFilter Save component", function () {
       $(".advancedfilter-saver-buttons > button.cancel").click();
       $(".advancedfilter-saver-buttons > button.save").click();
       $(".advancedfilter-saver-buttons > button.remove").click();
+      $(".advancedfilter-saver-buttons > button.apply").click();
 
       expect(sc.resetFilter).toHaveBeenCalled();
       expect(sc.resetFilter.calls.count()).toEqual(1);
       expect(sc.saveFilter).toHaveBeenCalled();
-      expect(sc.saveFilter.calls.count()).toEqual(1);
+      expect(sc.saveFilter.calls.count()).toEqual(2);
       expect(sc.cancelFilter).toHaveBeenCalled();
       expect(sc.cancelFilter.calls.count()).toEqual(1);
       expect(sc.removeFilter).toHaveBeenCalled();
       expect(sc.removeFilter.calls.count()).toEqual(1);
+      expect(sc.applyFilter).toHaveBeenCalled();
+      expect(sc.applyFilter.calls.count()).toEqual(1);
     });
 
     it("updates the name of the current filter on save", function() {
