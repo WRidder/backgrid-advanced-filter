@@ -163,7 +163,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
       "$and": [
         {
           "firstColumn": {
-            "$regex": "^anything"
+            "$regex": "(?i)^anything"
           }
         }
       ]
@@ -184,7 +184,7 @@ describe("A Backgrid.AdvancedFilter Filter model", function () {
     var mongoFilterString = fm.exportFilter("mongodb", true);
 
     // Save current state
-    expect(mongoFilterString).toEqual("{\"$and\":[{\"firstColumn\":{\"$regex\":\"^anything\"}}]}");
+    expect(mongoFilterString).toEqual("{\"$and\":[{\"firstColumn\":{\"$regex\":\"(?i)^anything\"}}]}");
   });
 });
 

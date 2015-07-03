@@ -21,35 +21,35 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
     attributeFilters: [
       {
         column: "name",
-        type: "text",
+        type: "string",
         matcher: "sw",
         value: "James",
         valid: true
       },
       {
         column: "name",
-        type: "text",
+        type: "string",
         matcher: "ew",
         value: "Root",
         valid: true
       },
       {
         column: "name",
-        type: "text",
+        type: "string",
         matcher: "ct",
         value: "William",
         valid: true
       },
       {
         column: "name",
-        type: "text",
+        type: "string",
         matcher: "eq",
         value: "James William Root",
         valid: true
       },
       {
         column: "name",
-        type: "text",
+        type: "string",
         matcher: "neq",
         value: "Corey Tailor",
         valid: true
@@ -126,56 +126,56 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
         column: "pctActive",
         type: "percent",
         matcher: "gt",
-        value: 0.05,
+        value: 5,
         valid: true
       },
       {
         column: "pctActive",
         type: "percent",
         matcher: "gte",
-        value: 0.1,
+        value: 10,
         valid: true
       },
       {
         column: "pctActive",
         type: "percent",
         matcher: "lt",
-        value: 0.5,
+        value: 50,
         valid: true
       },
       {
         column: "pctActive",
         type: "percent",
         matcher: "lte",
-        value: 0.4,
+        value: 40,
         valid: true
       },
       {
         column: "pctActive",
         type: "percent",
         matcher: "bt",
-        value: [0.25, 0.45],
+        value: [25, 45],
         valid: true
       },
       {
         column: "pctActive",
         type: "percent",
         matcher: "nbt",
-        value: [0.33, 0.66],
+        value: [33, 66],
         valid: true
       },
       {
         column: "pctActive",
         type: "percent",
         matcher: "eq",
-        value: 0.30,
+        value: 30,
         valid: true
       },
       {
         column: "pctActive",
         type: "percent",
         matcher: "neq",
-        value: 0.20,
+        value: 20,
         valid: true
       }
     ]
@@ -213,35 +213,35 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
           // Starts with
           {
             "name": {
-              "$regex": "^James"
+              "$regex": "(?i)^James"
             }
           },
 
           // Ends with
           {
             "name": {
-              "$regex": "Root$"
+              "$regex": "(?i)Root$"
             }
           },
 
           // Contains
           {
             "name": {
-              "$regex": "William"
+              "$regex": "(?i)William"
             }
           },
 
           // Equals
           {
             "name": {
-              "$eq": "James William Root"
+              "$eq": "(?i)James William Root"
             }
           },
 
           // Does not equal
           {
             "name": {
-              "$neq": "Corey Tailor"
+              "$neq": "(?i)Corey Tailor"
             }
           }
         ]

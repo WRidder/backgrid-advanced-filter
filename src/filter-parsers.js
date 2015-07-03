@@ -7,6 +7,8 @@
  */
 var _ = require("underscore");
 var Backgrid = require("backgrid");
+var FilterTypes = Backgrid.Extension.AdvancedFilter.FilterOptions.Types;
+
 Backgrid.Extension.AdvancedFilter.FilterParsers = {};
 
 /**
@@ -34,7 +36,31 @@ MongoParser.prototype.parse = function(filter) {
   // Parse filters
   var result = [];
   _.each(validAttributeFilters, function(attrFilter) {
-    result.push(self.parseAttributeFilter(attrFilter.toJSON()));
+    var attrFilterJson = attrFilter.toJSON();
+
+    // Parse and post-process values
+    var typeFilter = FilterTypes[attrFilterJson.type];
+    var processedValue;
+    if (_.isArray(attrFilterJson.value)) {
+      processedValue = [];
+      _.each(attrFilterJson.value, function(val) {
+        processedValue.push(typeFilter.postProcessor(typeFilter.parser(val)));
+      });
+    }
+    else {
+      processedValue = typeFilter.postProcessor(typeFilter.parser(attrFilterJson.value));
+    }
+
+    // Create parse object
+    var attrFilterToParse = {
+      matcher: attrFilterJson.matcher,
+      column: attrFilterJson.column,
+      type: attrFilterJson.type,
+      value: processedValue
+    };
+
+    // Create style filter
+    result.push(self.parseAttributeFilter(attrFilterToParse));
   });
 
   return {
@@ -69,19 +95,19 @@ MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
     case "sw":
       // Starts with
       result[attributeFilter.column] = {
-        "$regex": "^" + attributeFilter.value
+        "$regex": "(?i)^" + attributeFilter.value
       };
       break;
     case "ew":
       // Ends with
       result[attributeFilter.column] = {
-        "$regex": attributeFilter.value + "$"
+        "$regex": "(?i)" + attributeFilter.value + "$"
       };
       break;
     case "ct":
       // Contains
       result[attributeFilter.column] = {
-        "$regex": attributeFilter.value
+        "$regex": "(?i)" + attributeFilter.value
       };
       break;
 
@@ -154,13 +180,13 @@ MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
     case "eq":
       // Equals
       result[attributeFilter.column] = {
-        "$eq": attributeFilter.value
+        "$eq": (attributeFilter.type === "string") ? "(?i)" + attributeFilter.value : attributeFilter.value
       };
       break;
     case "neq":
       // Does not equal
       result[attributeFilter.column] = {
-        "$neq": attributeFilter.value
+        "$neq": (attributeFilter.type === "string") ? "(?i)" + attributeFilter.value : attributeFilter.value
       };
       break;
   }
@@ -192,7 +218,31 @@ SimpleParser.prototype.parse = function(filter) {
   // Parse filters
   var result = [];
   _.each(validAttributeFilters, function(attrFilter) {
-    result.push(self.parseAttributeFilter(attrFilter.toJSON()));
+    var attrFilterJson = attrFilter.toJSON();
+
+    // Parse and post-process values
+    var typeFilter = FilterTypes[attrFilterJson.type];
+    var processedValue;
+    if (_.isArray(attrFilterJson.value)) {
+      processedValue = [];
+      _.each(attrFilterJson.value, function(val) {
+        processedValue.push(typeFilter.postProcessor(typeFilter.parser(val)));
+      });
+    }
+    else {
+      processedValue = typeFilter.postProcessor(typeFilter.parser(attrFilterJson.value));
+    }
+
+    // Create parse object
+    var attrFilterToParse = {
+      matcher: attrFilterJson.matcher,
+      column: attrFilterJson.column,
+      type: attrFilterJson.type,
+      value: processedValue
+    };
+
+    // Create style filter
+    result.push(self.parseAttributeFilter(attrFilterToParse));
   });
 
   return result;

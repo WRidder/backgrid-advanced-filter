@@ -268,7 +268,7 @@ Backgrid.Extension.AdvancedFilter.Saver = Backbone.View.extend({
   applyFilter: function(e) {
     var self = this;
     self.saveFilter(e);
-    self.filterStateModel.trigger(&quot;filter:save&quot;);
+    self.filterStateModel.trigger(&quot;filter:apply&quot;);
   },
 
   /**
