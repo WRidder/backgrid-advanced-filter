@@ -1,6 +1,6 @@
 {
   "name": "backgrid-advanced-filter",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Advanced filter for backgrid",
   "main": "lib/Backgrid.AdvancedFilter.js",
   "directories": {

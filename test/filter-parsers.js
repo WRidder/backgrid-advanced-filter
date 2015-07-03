@@ -239,14 +239,14 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
           // Equals
           {
             "name": {
-              "$eq": "(?i)James William Root"
+              "$eq": "James William Root"
             }
           },
 
           // Does not equal
           {
             "name": {
-              "$neq": "(?i)Corey Tailor"
+              "$ne": "Corey Tailor"
             }
           }
         ]
@@ -307,7 +307,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
 
           // Outside
           {
-            "$and": [
+            "$or": [
               {
                 "age": {
                   "$lt": 33
@@ -331,7 +331,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
           // Does not equal
           {
             "age": {
-              "$neq": 20
+              "$ne": 20
             }
           }
         ]
@@ -382,7 +382,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
           },
           // Outside
           {
-            "$and": [
+            "$or": [
               {
                 "pctActive": {
                   "$lt": 0.33
@@ -405,7 +405,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
           // Not equal
           {
             "pctActive": {
-              "$neq": 0.20
+              "$ne": 0.20
             }
           }
         ]
@@ -426,7 +426,7 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
           },
           {
             "isChild": {
-              "$neq": false
+              "$ne": false
             }
           }
         ]

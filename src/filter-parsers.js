@@ -175,7 +175,7 @@ MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
       };
 
       result = {
-        "$and": [
+        "$or": [
           firstValnbt, secondValnbt
         ]
       };
@@ -185,13 +185,13 @@ MongoParser.prototype.parseAttributeFilter = function(attributeFilter) {
     case "eq":
       // Equals
       result[attributeFilter.column] = {
-        "$eq": (attributeFilter.type === "string") ? "(?i)" + attributeFilter.value : attributeFilter.value
+        "$eq": attributeFilter.value
       };
       break;
     case "neq":
       // Does not equal
       result[attributeFilter.column] = {
-        "$neq": (attributeFilter.type === "string") ? "(?i)" + attributeFilter.value : attributeFilter.value
+        "$ne": attributeFilter.value
       };
       break;
   }
