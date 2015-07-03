@@ -77,7 +77,7 @@ describe("A Backgrid.AdvancedFilter Selector - LabelView", function () {
       lv.on("new:filter", triggerNewFilterSpy);
 
       // Simulate click
-      lv.$el.find(".close-filter").click();
+      lv.$el.find(".close-filter-icon").click();
 
       expect(lv.closeClick).toHaveBeenCalled();
       expect(lv.labelClick).not.toHaveBeenCalled();
@@ -159,11 +159,11 @@ describe("A Backgrid.AdvancedFilter Selector", function () {
       it("updates the title when an active filter updates the name", function() {
         var filterModel = sel.filterStateModel.get("filterCollection")
           .get(sel.filterStateModel.get("activeFilterId"));
-        expect(sel.$el.find("span.close").text().trim()).toEqual("Test filter");
+        expect(sel.$el.find("span.close-filter-name").text().trim()).toEqual("Test filter");
 
         // Update name
         filterModel.set("name", "New name");
-        expect(sel.$el.find("span.close").text().trim()).toEqual("New name");
+        expect(sel.$el.find("span.close-filter-name").text().trim()).toEqual("New name");
       });
     });
   });

@@ -20,11 +20,11 @@ Backgrid.Extension.AdvancedFilter.SubComponents.LabelView = Backbone.View.extend
   tagName: "span",
   templates: {
     noFilterSelected: _.template("create"),
-    filterSelected: _.template("<span class=\"close\"><%-filterName%></span><span class=\"close-filter\">x</span>")
+    filterSelected: _.template("<span class=\"close-filter-name\"><%-filterName%></span><span class=\"close-filter-icon\">x</span>")
   },
   events: {
     "click": "labelClick",
-    "click .close-filter": "closeClick"
+    "click .close-filter-icon": "closeClick"
   },
 
   /**

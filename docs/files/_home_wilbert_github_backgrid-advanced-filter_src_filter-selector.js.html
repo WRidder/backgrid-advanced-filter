@@ -164,11 +164,11 @@ Backgrid.Extension.AdvancedFilter.SubComponents.LabelView = Backbone.View.extend
   tagName: &quot;span&quot;,
   templates: {
     noFilterSelected: _.template(&quot;create&quot;),
-    filterSelected: _.template(&quot;&lt;span class=\&quot;remove\&quot;&gt;&lt;%-filterName%&gt;&lt;/span&gt;&lt;span class=\&quot;remove-filter\&quot;&gt;x&lt;/span&gt;&quot;)
+    filterSelected: _.template(&quot;&lt;span class=\&quot;close-filter-name\&quot;&gt;&lt;%-filterName%&gt;&lt;/span&gt;&lt;span class=\&quot;close-filter-icon\&quot;&gt;x&lt;/span&gt;&quot;)
   },
   events: {
     &quot;click&quot;: &quot;labelClick&quot;,
-    &quot;click .remove-filter&quot;: &quot;removeClick&quot;
+    &quot;click .close-filter-icon&quot;: &quot;closeClick&quot;
   },
 
   /**
@@ -243,14 +243,15 @@ Backgrid.Extension.AdvancedFilter.SubComponents.LabelView = Backbone.View.extend
   },
 
   /**
-   * @method removeClick
+   * @method closeClick
    * @param {Event} e
    */
-  removeClick: function(e) {
+  closeClick: function(e) {
     var self = this;
     self.stopEvent(e);
     if (self.filterStateModel.get(&quot;activeFilterId&quot;)) {
       self.filterStateModel.trigger(&quot;filter:save&quot;);
+      self.filterStateModel.trigger(&quot;filter:close&quot;);
       self.filterStateModel.set(&quot;activeFilterId&quot;, null);
     }
   },
