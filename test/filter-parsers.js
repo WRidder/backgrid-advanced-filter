@@ -202,6 +202,11 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
     ]
   });
 
+  // Create filter
+  var emptyFilter = new AdvancedFilter.FilterModel({
+    name: "Test filter #1"
+  });
+
   it("creates a MongoDB query style json object when parsing a filter model", function() {
     describe("for text type attribute filters", function() {
       // Parse the filter
@@ -426,6 +431,14 @@ describe("A Backgrid.AdvancedFilter Mongo filter parser", function () {
           }
         ]
       });
+    });
+
+    describe("for empty attribute filters", function() {
+      // Parse the filter
+      var mongoStyleFilter = mongoParser.parse(emptyFilter);
+
+      // Compare results
+      expect(mongoStyleFilter).toEqual({});
     });
   });
 

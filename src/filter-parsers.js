@@ -63,9 +63,14 @@ MongoParser.prototype.parse = function(filter) {
     result.push(self.parseAttributeFilter(attrFilterToParse));
   });
 
-  return {
-    "$and": result
-  };
+  if (_.isEmpty(result)) {
+    return {};
+  }
+  else {
+    return {
+      "$and": result
+    };
+  }
 };
 
 /**
