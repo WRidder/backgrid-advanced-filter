@@ -52,7 +52,12 @@ Backgrid.Extension.AdvancedFilter.SubComponents.FilterDropdownItemview = Backbon
       self.stopPropagation(e);
     }
 
-    self.filterStateModel.setActiveFilter(self.filter);
+    // Get current filter
+    var currentFilter = self.filterStateModel.getActiveFilter();
+    if (currentFilter !== self.filter) {
+      self.filterStateModel.setActiveFilter(self.filter);
+      self.filterStateModel.trigger("filter:loaded");
+    }
   },
 
   /**
