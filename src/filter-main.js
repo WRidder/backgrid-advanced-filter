@@ -126,6 +126,7 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
     self.listenTo(fsm, "filter:reset", self.evtResetFilter);
     self.listenTo(fsm, "filter:cancel", self.evtCancelFilter);
     self.listenTo(fsm, "filter:remove", self.evtRemoveFilter);
+    self.listenTo(fsm, "filter:close", self.evtCloseFilter);
   },
 
   /**
@@ -221,6 +222,19 @@ Backgrid.Extension.AdvancedFilter.Main = Backbone.View.extend({
     fsm.set("activeFilterId", null);
     fsm.get("filterCollection").remove(filter);
     self.trigger("filter:remove", filterId, filterName);
+  },
+
+  /**
+   * Event handler for filter:close (fsm)
+   * @method evtCloseFilter
+   */
+  evtCloseFilter: function() {
+    var self = this;
+    var fsm = self.filterStateModel;
+    var filter = fsm.getActiveFilter();
+    if (filter) {
+      self.trigger("filter:close", filter.cid, filter);
+    }
   },
 
   /**

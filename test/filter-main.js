@@ -89,6 +89,7 @@ describe("A Backgrid.AdvancedFilter Main", function () {
       spyOn(AdvancedFilter.Main.prototype, "evtResetFilter").and.callThrough();
       spyOn(AdvancedFilter.Main.prototype, "evtCancelFilter").and.callThrough();
       spyOn(AdvancedFilter.Main.prototype, "evtRemoveFilter").and.callThrough();
+      spyOn(AdvancedFilter.Main.prototype, "evtCloseFilter").and.callThrough();
 
       var filters = new AdvancedFilter.FilterCollection([
         {
@@ -219,6 +220,28 @@ describe("A Backgrid.AdvancedFilter Main", function () {
       main.filterStateModel.trigger("filter:apply");
       expect(main.evtApplyFilter).toHaveBeenCalled();
       expect(main.evtApplyFilter.calls.count()).toEqual(1);
+
+      // Get filter
+      var filterId = main.filterStateModel.get("activeFilterId");
+      var filter = main.filterStateModel.get("filterCollection").get(filterId);
+
+      // Check if events are triggered on the main component
+      expect(triggerSpy).toHaveBeenCalled();
+      expect(triggerSpy.calls.count()).toEqual(1);
+      expect(triggerSpy).toHaveBeenCalledWith(
+        filterId,
+        filter
+      );
+    });
+
+    it("binds to the filter:close event on the filter state model", function () {
+      var triggerSpy = jasmine.createSpy("triggerSpy");
+      main.on("filter:close", triggerSpy);
+
+      // Trigger event
+      main.filterStateModel.trigger("filter:close");
+      expect(main.evtCloseFilter).toHaveBeenCalled();
+      expect(main.evtCloseFilter.calls.count()).toEqual(1);
 
       // Get filter
       var filterId = main.filterStateModel.get("activeFilterId");
