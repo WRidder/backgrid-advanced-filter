@@ -29,6 +29,10 @@ An advanced filter plugin for Backgrid.
     advancedFilter.on("filter:save", function(filterId, filterModel) {
         console.log("Currently active filter saved.");
     });
+    
+    advancedFilter.on("filter:apply", function(filterId, filterModel) {
+        console.log("Filter apply requested");
+    });
 
     advancedFilter.on("filter:cancel", function(filterId, filterModel, stateBeforeCancel) {
         console.log("Changes made to current filter reverted.");
@@ -46,7 +50,7 @@ An advanced filter plugin for Backgrid.
 **Filtering**  
   
 ```javascript
-    advancedFilter.on("filter:save", function(filterId, filterModel) {
+    advancedFilter.on("filter:apply", function(filterId, filterModel) {
         // Get filter definition (default is mongo style)
         var definition = filterModel.exportFilter("mongo");
         
@@ -59,9 +63,6 @@ An advanced filter plugin for Backgrid.
         });        
     });
 ```  
-
-## Roadmap / TODO
-- API reference example
 
 ## Dependencies
 * [Backgrid filter](https://github.com/wyuenho/backgrid-filter)
