@@ -11,7 +11,7 @@ An advanced filter plugin for Backgrid.
       collection: dataCollection,
       /*
         Filterable columns need an additional attribute 'filterType'.
-        e.g.: filterType: 'text';  (Supported: text, number, boolean, percent)
+        e.g.: filterType: 'string';  (Supported: string, number, boolean, percent)
       */
       columns: columnCollection,
       /* optional */
