@@ -19,10 +19,30 @@ module.exports = function (release) {
       libraryTarget: "umd"
     },
     externals: {
-      "jquery": "jQuery",
-      "backbone": "Backbone",
-      "underscore": "_",
-      "backgrid": "Backgrid"
+      "jquery": {
+        root: "jQuery",
+        amd: "jquery",
+        commonjs: "jquery",
+        commonjs2: "jquery"
+      },
+      "backbone": {
+        root: "Backbone",
+        amd: "backbone",
+        commonjs: "backbone",
+        commonjs2: "backbone"
+      },
+      "underscore": {
+        root: "_",
+        amd: "underscore",
+        commonjs: "underscore",
+        commonjs2: "underscore"
+      },
+      "backgrid": {
+        root: "Backgrid",
+        amd: "backgrid",
+        commonjs: "backgrid",
+        commonjs2: "backgrid"
+      }
     },
 
     stats: {
